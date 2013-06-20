@@ -60,7 +60,7 @@ public class ParksListActivity extends Activity
 		resultList 	= (ListView) 	findViewById(R.id.parksListView);
 		//superBar 	= (ImageView) 	findViewById(R.id.SuperBar);
 		
-		adapter = new ArrayAdapter<Parco>(getApplicationContext(), android.R.layout.simple_list_item_1, new ArrayList<Parco>());
+		adapter = new ArrayAdapter<Parco>(getApplicationContext(), R.layout.listview_layout, new ArrayList<Parco>());
 		resultList.setAdapter(adapter);
 		resultList.setCacheColorHint(Color.TRANSPARENT);
 		resultList.setOnItemClickListener(new AdapterView.OnItemClickListener() 
@@ -133,7 +133,7 @@ public class ParksListActivity extends Activity
 		{ 
 			public void onClick(View arg0) 
 			{				 
-				   Toast.makeText(ParksListActivity.this,
+				    Toast.makeText(ParksListActivity.this,
 					"nearSortButton is clicked!", Toast.LENGTH_SHORT).show();
 					//ordina per vicinanza
 				
@@ -310,7 +310,7 @@ public class ParksListActivity extends Activity
 			} 
 			catch (Exception e) 
 			{
-				Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+				//Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
 			}
 			return parks;
 		}
@@ -322,8 +322,8 @@ public class ParksListActivity extends Activity
 			addPlace.	setEnabled(true);
 			nearSort.	setEnabled(true);
 			voteSort.	setEnabled(true);
-			dialog.cancel();
-			adapter.clear();
+			dialog.     cancel();
+			adapter.    clear();
 			if (parks!=null)
 			{
 				for (Parco park : parks) 

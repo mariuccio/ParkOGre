@@ -249,7 +249,6 @@ public class ParkDetailActivity extends Activity
 	
 	public void addPhoto(String url) throws IOException
 	{
-		//mettere url nella foto
 		URL newurl = new URL(url); 
 		Bitmap mIcon_val = BitmapFactory.decodeStream(newurl.openConnection() .getInputStream()); 
 		photo.setImageBitmap(mIcon_val);

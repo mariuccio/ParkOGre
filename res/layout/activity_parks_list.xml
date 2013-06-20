@@ -16,14 +16,14 @@
 
         <ImageButton
             android:id="@+id/AddPlace"
-            android:layout_width="52dp"
+            android:layout_width="50dp"
             android:layout_height="match_parent"
             android:onClick="addPlace"
             android:src="@drawable/plus" />
 
         <EditText
             android:id="@+id/SearchText"
-            android:layout_width="106dp"
+            android:layout_width="108dp"
             android:layout_height="wrap_content"
             android:layout_weight="31.82"
             android:ems="10" />
@@ -43,7 +43,7 @@
 
         <ImageButton
             android:id="@+id/NearSort"
-            android:layout_width="109dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.01"
             android:onClick="nearSort"
@@ -51,7 +51,7 @@
 
         <ImageButton
             android:id="@+id/VoteSort"
-            android:layout_width="88dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.01"
             android:onClick="voteSort"
