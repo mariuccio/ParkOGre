@@ -56,7 +56,6 @@
             android:layout_weight="0.01"
             android:onClick="voteSort"
             android:src="@drawable/marghe4su4" />
-
     </LinearLayout>
 
     <ListView
@@ -64,7 +63,6 @@
         android:layout_width="match_parent"
         android:layout_height="246dp"
         android:layout_weight="1.66" >
-
     </ListView>
 
 </LinearLayout>

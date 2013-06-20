@@ -13,8 +13,8 @@ import java.util.Map;
 import com.google.gson.Gson;
 
 public class ParcoAPI extends RestClient {
-	private static final String GET_START_PARKS = "http://lazooo.redirectme.net/park/search/gps/";
-	private static final String GET_PARKS = "http://lazooo.redirectme.net/park/search/query/";
+	private static final String GET_START_PARKS = "http://lazooo.redirectme.net:8080/park/search/gps/";
+	private static final String GET_PARKS = "http://lazooo.redirectme.net:8080/park/search/query/roma";
 	
 	/* API calls */
 	public static String getStartParks(double d, double f) {

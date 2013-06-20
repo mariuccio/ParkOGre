@@ -16,6 +16,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -61,6 +62,7 @@ public class ParksListActivity extends Activity
 		
 		adapter = new ArrayAdapter<Parco>(getApplicationContext(), android.R.layout.simple_list_item_1, new ArrayList<Parco>());
 		resultList.setAdapter(adapter);
+		resultList.setCacheColorHint(Color.TRANSPARENT);
 		resultList.setOnItemClickListener(new AdapterView.OnItemClickListener() 
 		{
 			@Override
@@ -258,7 +260,8 @@ public class ParksListActivity extends Activity
 			voteSort.	setEnabled(true);
 			dialog.cancel();			
 			adapter.clear();
-			if(parks!=null) {
+			if(parks!=null) 
+			{
 				for (Parco park : parks) 
 				{
 					adapter.add(park);
@@ -321,10 +324,13 @@ public class ParksListActivity extends Activity
 			voteSort.	setEnabled(true);
 			dialog.cancel();
 			adapter.clear();
-			for (Parco park : parks) 
+			if (parks!=null)
 			{
-				adapter.add(park);
-			}			
+				for (Parco park : parks) 
+				{
+					adapter.add(park);
+				}	
+			}
 			super.onPostExecute(parks);
 		}
 	}

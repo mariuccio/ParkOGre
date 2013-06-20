@@ -31,6 +31,8 @@ public class ParkDetailActivity extends Activity
 	private ImageView vote3 	  = null;
 	private Button    toVote	  = null;
 	private Button    indications = null;
+	private float 	  votoAttuale = 0;
+	private float     numvoti     = 0;
 	
 	
 
@@ -50,7 +52,9 @@ public class ParkDetailActivity extends Activity
 		vote3 		= (ImageView) 	findViewById(R.id.Voto3);
 		toVote 		= (Button) 		findViewById(R.id.Vota);
 		indications = (Button) 		findViewById(R.id.Indicazioni);
-		
+		//votoAttuale = Float.parseFloat(getIntent().getStringExtra("votoattuale" ));
+		//numvoti     = Float.parseFloat(getIntent().getStringExtra("numvoti" ));
+				
 		textName. setText(getIntent().getStringExtra("nomeparco" ));
 		textCity. setText(getIntent().getStringExtra("city" ));
 		textIndirizzo. setText(getIntent().getStringExtra("indirizzoparco" ));
@@ -59,11 +63,12 @@ public class ParkDetailActivity extends Activity
 //		showVote(Float.parseFloat("vote"));
 		addListenerOnButtons();
 		try {
-			addPhoto("imageurl");
+			addPhoto(getIntent().getStringExtra("imageurl"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		//showVote(votoAttuale);
 	}
 	
 	public void showVote(Float x)
