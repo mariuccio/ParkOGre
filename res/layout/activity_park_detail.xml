@@ -11,7 +11,7 @@
 
         <ImageView
             android:id="@+id/Foto"
-            android:layout_width="256dp"
+            android:layout_width="174dp"
             android:layout_height="174dp"
             android:src="@drawable/ic_launcher" />
 

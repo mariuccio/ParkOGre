@@ -31,8 +31,8 @@ public class ParkDetailActivity extends Activity
 	private ImageView vote3 	  = null;
 	private Button    toVote	  = null;
 	private Button    indications = null;
-	private float 	  votoAttuale = 0;
-	private float     numvoti     = 0;
+	private double	  votoAttuale = 0;
+	private int       numvoti     = 0;
 	
 	
 
@@ -52,8 +52,8 @@ public class ParkDetailActivity extends Activity
 		vote3 		= (ImageView) 	findViewById(R.id.Voto3);
 		toVote 		= (Button) 		findViewById(R.id.Vota);
 		indications = (Button) 		findViewById(R.id.Indicazioni);
-		//votoAttuale = Float.parseFloat(getIntent().getStringExtra("votoattuale" ));
-		//numvoti     = Float.parseFloat(getIntent().getStringExtra("numvoti" ));
+		votoAttuale = getIntent().getDoubleExtra("votoattuale", 0);
+		numvoti     = getIntent().getIntExtra("numvoti", 0);
 				
 		textName. setText(getIntent().getStringExtra("nomeparco" ));
 		textCity. setText(getIntent().getStringExtra("city" ));
@@ -71,7 +71,7 @@ public class ParkDetailActivity extends Activity
 		//showVote(votoAttuale);
 	}
 	
-	public void showVote(Float x)
+	public void showVote(Double x)
 	{
 		if (x<0.25)
 		{
