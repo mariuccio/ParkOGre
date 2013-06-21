@@ -15,66 +15,92 @@
             android:layout_height="174dp"
             android:src="@drawable/ic_launcher" />
 
-        <Button
-            android:id="@+id/Vota"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Vota" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <Button
+                android:id="@+id/Vota"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Vota" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="52dp" >
+
+                <ImageView
+                    android:id="@+id/Voto1"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="0.34"
+                    android:src="@drawable/ic_launcher" />
+
+                <ImageView
+                    android:id="@+id/Voto2"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="0.33"
+                    android:src="@drawable/ic_launcher" />
+
+                <ImageView
+                    android:id="@+id/Voto3"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="0.36"
+                    android:src="@drawable/ic_launcher" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textNumVoti"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="0.36" />
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="42dp"
-        android:layout_weight="0.22" >
+        android:layout_height="wrap_content"
+        android:layout_weight="0.50"
+        android:orientation="vertical" >
 
         <TextView
             android:id="@+id/textName"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.36" />
+            android:layout_weight="0.08" />
 
-        <ImageView
-            android:id="@+id/Voto1"
-            android:layout_width="46dp"
-            android:layout_height="41dp"
-            android:src="@drawable/ic_launcher" />
+        <TextView
+            android:id="@+id/textIndirizzo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.17" />
 
-        <ImageView
-            android:id="@+id/Voto2"
-            android:layout_width="48dp"
-            android:layout_height="43dp"
-            android:src="@drawable/ic_launcher" />
+        <TextView
+            android:id="@+id/textCity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.28" />
 
-        <ImageView
-            android:id="@+id/Voto3"
-            android:layout_width="44dp"
-            android:layout_height="45dp"
-            android:src="@drawable/ic_launcher" />
+        <TextView
+            android:id="@+id/textCoordinate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.17" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/textCity"
-        android:layout_width="179dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.28" />
-
-    <TextView
-        android:id="@+id/textIndirizzo"
-        android:layout_width="214dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.17"
-        android:text="" />
-
-    <TextView
-        android:id="@+id/textCoordinate"
-        android:layout_width="192dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.17" />
-
-    <Button
-        android:id="@+id/Indicazioni"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Indicazioni Stradali" />
+        android:orientation="vertical" >
+
+        <Button
+            android:id="@+id/Indicazioni"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Indicazioni Stradali" />
+    </LinearLayout>
 
 </LinearLayout>

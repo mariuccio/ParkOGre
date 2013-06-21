@@ -20,57 +20,71 @@ import android.widget.Toast;
 
 public class ParkDetailActivity extends Activity 
 {
-	private GPS		  gps		  = null;
-	private TextView  textName    = null;
-	private TextView  textCity    = null;
-	private TextView  textIndirizzo    = null;
-	private TextView  textCoordinate    = null;
-	private ImageView photo       = null;
-	private ImageView vote1 	  = null;
-	private ImageView vote2 	  = null;
-	private ImageView vote3 	  = null;
-	private Button    toVote	  = null;
-	private Button    indications = null;
-	private double	  votoAttuale = 0;
-	private int       numvoti     = 0;
+	private GPS		  gps		  	 = null;
+	private TextView  textName    	 = null;
+	private TextView  textCity    	 = null;
+	private TextView  textIndirizzo  = null;
+	private TextView  textCoordinate = null;
+	private TextView  textNumVoti    = null;
+	private ImageView photo       	 = null;
+	private ImageView vote1 	 	 = null;
+	private ImageView vote2 	 	 = null;
+	private ImageView vote3 	     = null;
+	private Button    toVote	     = null;
+	private Button    indications    = null;
+	private double	  votoAttuale          ;
+	private int       numvoti              ;
 	
 	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
 	{
+		/**********Standard Activity Start*************/
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_park_detail);
 		
-		textName 	= (TextView) 	findViewById(R.id.textName);
-		textCity 	= (TextView) 	findViewById(R.id.textCity);
-		textIndirizzo 	= (TextView) 	findViewById(R.id.textIndirizzo);
-		textCoordinate 	= (TextView) 	findViewById(R.id.textCoordinate);
-		photo 		= (ImageView) 	findViewById(R.id.Foto);
-		vote1 		= (ImageView) 	findViewById(R.id.Voto1);
-		vote2 		= (ImageView) 	findViewById(R.id.Voto2);
-		vote3 		= (ImageView) 	findViewById(R.id.Voto3);
-		toVote 		= (Button) 		findViewById(R.id.Vota);
-		indications = (Button) 		findViewById(R.id.Indicazioni);
-		votoAttuale = getIntent().getDoubleExtra("votoattuale", 0);
-		numvoti     = getIntent().getIntExtra("numvoti", 0);
-				
-		textName. setText(getIntent().getStringExtra("nomeparco" ));
-		textCity. setText(getIntent().getStringExtra("city" ));
-		textIndirizzo. setText(getIntent().getStringExtra("indirizzoparco" ));
-		textCoordinate. setText(getIntent().getStringExtra("coordinate" ));
+		/**********Taking Layouts from XML Files*******/
+		textName 	    = (TextView) 	findViewById(R.id.textName           );
+		textCity 	    = (TextView) 	findViewById(R.id.textCity           );
+		textIndirizzo 	= (TextView) 	findViewById(R.id.textIndirizzo      );
+		textCoordinate 	= (TextView) 	findViewById(R.id.textCoordinate     );
+		textNumVoti     = (TextView)    findViewById(R.id.textNumVoti        );
+		photo 		    = (ImageView) 	findViewById(R.id.Foto               );
+		vote1 		    = (ImageView) 	findViewById(R.id.Voto1              );
+		vote2 		    = (ImageView) 	findViewById(R.id.Voto2              );
+		vote3 		    = (ImageView) 	findViewById(R.id.Voto3              );
+		toVote 		    = (Button) 		findViewById(R.id.Vota               );
+		indications     = (Button) 		findViewById(R.id.Indicazioni        );
 		
-//		showVote(Float.parseFloat("vote"));
+		/**********Taking values from previous activity variables*********/
+		votoAttuale     =                        getIntent().getDoubleExtra("votoattuale", 0  );
+		numvoti         =                        getIntent().getIntExtra   ("numvoti"    , 0  );
+		textName.       setText("Nome: "       + getIntent().getStringExtra("nomeparco"      ));
+		textCity.       setText("Città: "      + getIntent().getStringExtra("city"           ));
+		textIndirizzo.  setText("Indirizzo: "  + getIntent().getStringExtra("indirizzoparco" ));
+		textCoordinate. setText("Coordinate: " + getIntent().getStringExtra("coordinate"     ));
+		
+		/****It writes number of votes using numvoti int variable****/
+		textNumVoti.setText("Numero Voti: " +Integer.toString(numvoti));
+				
+		/**********Set button listeners*********/
 		addListenerOnButtons();
+		
+		/**********Set park's image from url*********/		
 		try {
 			addPhoto(getIntent().getStringExtra("imageurl"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		showVote(votoAttuale);
+		
+		/**********Set users' vote*********/
+		showVote(/*votoAttuale*/0.25);
 	}
 	
+	
+	/*****Function that sets up png visibility depending on users' vote*****/
 	public void showVote(Double x)
 	{
 		if (x<0.25)
@@ -221,6 +235,7 @@ public class ParkDetailActivity extends Activity
 	
 	public void addListenerOnButtons()
 	{
+		/***On click it shows a menu where the user can choose a vote from 0 to 6***/
 		toVote.setOnClickListener(new OnClickListener() 
 		{ 
 			public void onClick(View arg0) 
@@ -232,7 +247,7 @@ public class ParkDetailActivity extends Activity
 				   //spedisco valore al server
 			} 
 		});
-		
+		/***On click it shows an activity where the user can see google maps indications from his location to the park***/
 		indications.setOnClickListener(new OnClickListener() 
 		{ 
 			public void onClick(View arg0) 
@@ -246,7 +261,7 @@ public class ParkDetailActivity extends Activity
 			} 
 		});
 	}
-	
+	/***Function that takes photo from the url and puts it in the imageview***/
 	public void addPhoto(String url) throws IOException
 	{
 		URL newurl = new URL(url); 
