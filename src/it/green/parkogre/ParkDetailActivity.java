@@ -68,7 +68,7 @@ public class ParkDetailActivity extends Activity
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		//showVote(votoAttuale);
+		showVote(votoAttuale);
 	}
 	
 	public void showVote(Double x)
@@ -101,97 +101,97 @@ public class ParkDetailActivity extends Activity
 		{
 			vote1.setImageResource(R.drawable.pescio4su4);
 			vote2.setImageResource(R.drawable.pescio4su4);
-			vote3.setEnabled(false);
+			vote3.setVisibility(View.INVISIBLE);
 		}
 		if (x<1.5 && x>=1.25)
 		{
 			vote1.setImageResource(R.drawable.pescio4su4);
 			vote2.setImageResource(R.drawable.pescio3su4);
-			vote3.setEnabled(false);
+			vote3.setVisibility(View.INVISIBLE);
 		}
 		if (x<1.75 && x>=1.5)
 		{
 			vote1.setImageResource(R.drawable.pescio4su4);
 			vote2.setImageResource(R.drawable.pescio2su4);
-			vote3.setEnabled(false);
+			vote3.setVisibility(View.INVISIBLE);
 		}
 		if (x<2 && x>=1.75)
 		{
 			vote1.setImageResource(R.drawable.pescio4su4);
 			vote2.setImageResource(R.drawable.pescio1su4);
-			vote3.setEnabled(false);
+			vote3.setVisibility(View.INVISIBLE);
 		}
 		if (x<2.25 && x>=2)
 		{
 			vote1.setImageResource(R.drawable.pescio4su4);
-			vote2.setEnabled(false);
-			vote3.setEnabled(false);
+			vote2.setVisibility(View.INVISIBLE);
+			vote3.setVisibility(View.INVISIBLE);
 		}
 		if (x<2.5 && x>=2.25)
 		{
 			vote1.setImageResource(R.drawable.pescio3su4);
-			vote2.setEnabled(false);
-			vote3.setEnabled(false);
+			vote2.setVisibility(View.INVISIBLE);
+			vote3.setVisibility(View.INVISIBLE);
 		}
 		if (x<2.75 && x>=2.5)
 		{
 			vote1.setImageResource(R.drawable.pescio2su4);
-			vote2.setEnabled(false);
-			vote3.setEnabled(false);
+			vote2.setVisibility(View.INVISIBLE);
+			vote3.setVisibility(View.INVISIBLE);
 		}
 		if (x<3 && x>=2.75)
 		{
 			vote1.setImageResource(R.drawable.pescio1su4);
-			vote2.setEnabled(false);
-			vote3.setEnabled(false);
+			vote2.setVisibility(View.INVISIBLE);
+			vote3.setVisibility(View.INVISIBLE);
 		}
 		if (x<3.25 && x>=3)
 		{
 			vote1.setImageResource(R.drawable.marghe1su4);
-			vote2.setEnabled(false);
-			vote3.setEnabled(false);
+			vote2.setVisibility(View.INVISIBLE);
+			vote3.setVisibility(View.INVISIBLE);
 		}
 		if (x<3.5 && x>=3.25)
 		{
 			vote1.setImageResource(R.drawable.marghe2su4);
-			vote2.setEnabled(false);
-			vote3.setEnabled(false);
+			vote2.setVisibility(View.INVISIBLE);
+			vote3.setVisibility(View.INVISIBLE);
 		}
 		if (x<3.75 && x>=3.5)
 		{
 			vote1.setImageResource(R.drawable.marghe3su4);
-			vote2.setEnabled(false);
-			vote3.setEnabled(false);
+			vote2.setVisibility(View.INVISIBLE);
+			vote3.setVisibility(View.INVISIBLE);
 		}
 		if (x<4 && x>=3.75)
 		{
 			vote1.setImageResource(R.drawable.marghe4su4);
-			vote2.setEnabled(false);
-			vote3.setEnabled(false);
+			vote2.setVisibility(View.INVISIBLE);
+			vote3.setVisibility(View.INVISIBLE);
 		}
 		if (x<4.25 && x>=4)
 		{
 			vote1.setImageResource(R.drawable.marghe4su4);
 			vote2.setImageResource(R.drawable.marghe1su4);
-			vote3.setEnabled(false);
+			vote3.setVisibility(View.INVISIBLE);
 		}
 		if (x<4.5 && x>=4.25)
 		{
 			vote1.setImageResource(R.drawable.marghe4su4);
 			vote2.setImageResource(R.drawable.marghe2su4);
-			vote3.setEnabled(false);
+			vote3.setVisibility(View.INVISIBLE);
 		}
 		if (x<4.75 && x>=4.5)
 		{
 			vote1.setImageResource(R.drawable.marghe4su4);
 			vote2.setImageResource(R.drawable.marghe3su4);
-			vote3.setEnabled(false);
+			vote3.setVisibility(View.INVISIBLE);
 		}
 		if (x<5 && x>=4.75)
 		{
 			vote1.setImageResource(R.drawable.marghe4su4);
 			vote2.setImageResource(R.drawable.marghe4su4);
-			vote3.setEnabled(false);
+			vote3.setVisibility(View.INVISIBLE);
 		}
 		if (x<5.25 && x>=5)
 		{
