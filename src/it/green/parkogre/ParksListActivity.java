@@ -42,6 +42,7 @@ public class ParksListActivity extends Activity
 	private ArrayAdapter<Parco> adapter 	= null;
 	private GPS  				gps  		= null;
 	private ProgressDialog 		dialog 		= null;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
 	{
@@ -52,11 +53,11 @@ public class ParksListActivity extends Activity
         if(!gps.canGetLocation())
            	gps.showSettingsAlert();  
 		
-        searchText	= (EditText)	findViewById(R.id.SearchText);
-		addPlace 	= (ImageButton) findViewById(R.id.AddPlace);
-		searchPlace = (ImageButton) findViewById(R.id.SearchPlace);
-		nearSort 	= (ImageButton) findViewById(R.id.NearSort);
-		voteSort 	= (ImageButton) findViewById(R.id.VoteSort);
+        searchText	= (EditText)	findViewById(R.id.SearchText   );
+		addPlace 	= (ImageButton) findViewById(R.id.AddPlace     );
+		searchPlace = (ImageButton) findViewById(R.id.SearchPlace  );
+		nearSort 	= (ImageButton) findViewById(R.id.NearSort     );
+		voteSort 	= (ImageButton) findViewById(R.id.VoteSort     );
 		resultList 	= (ListView) 	findViewById(R.id.parksListView);
 		//superBar 	= (ImageView) 	findViewById(R.id.SuperBar);
 		
