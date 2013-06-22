@@ -152,12 +152,17 @@ public class ParksListActivity extends Activity
 				          return dist1 < dist2 ? -1 : 1;             
 				         }  
 				     }); 
+					/*
 				       adapter.clear();
 				     for (Parco park : parks) 
 				     {
 				      adapter.add(park);
 				     }
 				     resultList.setAdapter(adapter);
+				     
+				     */
+					
+					fetchParksOrder(resultList);
 			} 
 		});
 		
@@ -177,12 +182,24 @@ public class ParksListActivity extends Activity
 			                return voto1 > voto2 ? -1 : 1;
 			            }
 			        }); 
-			          adapter.clear();
-			        for (Parco park : parks) 
-			        {
-			         adapter.add(park);
-			        }
-			        resultList.setAdapter(adapter);
+				   	
+				   	for (Parco park : parks) 
+				     {
+				      Toast.makeText(ParksListActivity.this, park.getCity(), Toast.LENGTH_SHORT);
+				     }
+			        
+
+				   	/*
+				       adapter.clear();
+				     for (Parco park : parks) 
+				     {
+				      adapter.add(park);
+				     }
+				     resultList.setAdapter(adapter);
+				     
+				     */
+					
+					fetchParksOrder(resultList);
 			} 
 		});
 	}
@@ -203,6 +220,11 @@ public class ParksListActivity extends Activity
 	{
 		new FetchParksSearchTask().execute();
 	}
+	
+	
+	
+	
+	
 	
 	private class FetchParksTask extends AsyncTask<Void, Void, ArrayList<Parco>> 
 	{
@@ -334,4 +356,90 @@ public class ParksListActivity extends Activity
 			super.onPostExecute(parks);
 		}
 	}
+
+
+
+
+
+
+
+
+//qui ho copiato come sopra ma solo per riordina la listView
+public void fetchParksOrder(View v) 
+{
+	new FetchParksOrderTask().execute();
+}
+
+
+private class FetchParksOrderTask extends AsyncTask<Void, Void, ArrayList<Parco>> 
+{
+	@Override
+	protected void onPreExecute() 
+	{
+		dialog = new ProgressDialog(ParksListActivity.this);
+		dialog.setIndeterminate(true);
+		dialog.setIndeterminateDrawable(getResources().getDrawable(R.anim.anim_progress_bar));
+		dialog.setMessage("Caricamento...");
+		dialog.show();
+		searchPlace.setEnabled(false);
+		addPlace.	setEnabled(false);
+		nearSort.	setEnabled(false);
+		voteSort.	setEnabled(false);
+		super.onPreExecute();
+	}
+
+	@Override
+	protected ArrayList<Parco> doInBackground(Void... params) 
+	{
+		/*parks = new ArrayList<Parco>();
+		
+		try 
+		{
+			// Parse JSONObject as simple text and put values inside adapter
+//			System.out.println("CIAO"+ParcoAPI.getStartParks(gps.getLatitude(), gps.getLongitude()));
+			JSONArray jsonResult = new JSONArray(ParcoAPI.getStartParks(gps.getLatitude(), gps.getLongitude()));
+//			System.out.println("OOOOOH"+jsonResult);
+//			if(jsonResult==null)
+//			{
+//				parks.add(new Parco(null));
+//				return parks;
+//			}
+			for (int i = 0; i < jsonResult.length(); i++) 
+			{
+//				System.out.println(jsonResult.getJSONObject(i));
+				parks.add(new Parco(jsonResult.getJSONObject(i)));
+			}
+		} 
+		catch (Exception e) 
+		{
+//			Log.e("ogre", e.getMessage());
+			parks = null;
+		}
+		*/
+		return parks;
+	}
+	
+	@Override
+	protected void onPostExecute(ArrayList<Parco> parks) 
+	{
+		searchPlace.setEnabled(true);
+		addPlace.	setEnabled(true);
+		nearSort.	setEnabled(true);
+		voteSort.	setEnabled(true);
+		dialog.cancel();			
+		adapter.clear();
+		
+		if(parks!=null) 
+		{
+			for (Parco park : parks) 
+			{
+				adapter.add(park);
+			}
+			
+		}
+		
+		super.onPostExecute(parks);
+	}
+}
+
 }

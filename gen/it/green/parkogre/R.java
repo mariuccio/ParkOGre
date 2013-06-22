@@ -55,9 +55,9 @@ public final class R {
         public static final int action_settings=0x7f090012;
         public static final int listTextView=0x7f090011;
         public static final int parksListView=0x7f090010;
-        public static final int textCity=0x7f090007;
+        public static final int textCity=0x7f090008;
         public static final int textCoordinate=0x7f090009;
-        public static final int textIndirizzo=0x7f090008;
+        public static final int textIndirizzo=0x7f090007;
         public static final int textName=0x7f090006;
         public static final int textNumVoti=0x7f090005;
     }
