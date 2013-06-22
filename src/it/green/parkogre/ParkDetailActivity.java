@@ -6,17 +6,23 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.content.DialogInterface;
 
 public class ParkDetailActivity extends Activity 
 {
@@ -69,7 +75,7 @@ public class ParkDetailActivity extends Activity
 		textNumVoti.setText("Numero Voti: " +Integer.toString(numvoti));
 				
 		/**********Set button listeners*********/
-		addListenerOnButtons();
+		addListenerOnButtons(this);
 		
 		/**********Set park's image from url*********/		
 		try {
@@ -81,6 +87,9 @@ public class ParkDetailActivity extends Activity
 		
 		/**********Set users' vote*********/
 		showVote(/*votoAttuale*/0.25);
+		
+		
+	    
 	}
 	
 	
@@ -233,7 +242,7 @@ public class ParkDetailActivity extends Activity
 		}
 	}
 	
-	public void addListenerOnButtons()
+	public void addListenerOnButtons(final Context context)
 	{
 		/***On click it shows a menu where the user can choose a vote from 0 to 6***/
 		toVote.setOnClickListener(new OnClickListener() 
@@ -245,6 +254,15 @@ public class ParkDetailActivity extends Activity
 				   //login (secondo me è meglio farlo all'inizio)
 				   //menu da 0 a 6?	 
 				   //spedisco valore al server
+				   AlertDialog.Builder adb=new AlertDialog.Builder(context);
+				   adb.setTitle("Vote this Park");
+				   adb.setMessage("Choose from 0 to 6");
+				   adb.setNeutralButton("I don't want to vote", new DialogInterface.OnClickListener() {
+				        public void onClick(DialogInterface dialog, int which) { 
+				            // do nothing
+				        }
+				     });
+				   adb.show();
 			} 
 		});
 		/***On click it shows an activity where the user can see google maps indications from his location to the park***/
