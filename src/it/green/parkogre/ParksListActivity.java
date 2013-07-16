@@ -36,7 +36,6 @@ public class ParksListActivity extends Activity
 	private ImageButton 		searchPlace = null;
 	private ImageButton 		nearSort 	= null;
 	private ImageButton 		voteSort 	= null;
-	private ImageView 			superBar 	= null;
 	private ListView 			resultList 	= null;
 	private ArrayList<Parco> 	parks       = null;
 	private ArrayAdapter<Parco> adapter 	= null;
@@ -122,7 +121,8 @@ public class ParksListActivity extends Activity
 		searchPlace.setOnClickListener(new OnClickListener() 
 		{ 
 			public void onClick(View arg0) 
-			{				 
+			{
+                   parks.clear();
 				   Toast.makeText(ParksListActivity.this,
 					"searchPlaceButton is clicked!", Toast.LENGTH_SHORT).show();
 				   //da gestire nel thread
@@ -133,15 +133,15 @@ public class ParksListActivity extends Activity
 		nearSort.setOnClickListener(new OnClickListener() 
 		{ 
 			public void onClick(View arg0) 
-			{				 
-				    Toast.makeText(ParksListActivity.this,
+			{
+                    Toast.makeText(ParksListActivity.this,
 					"nearSortButton is clicked!", Toast.LENGTH_SHORT).show();
 					//ordina per vicinanza
 				
 					Collections.sort(parks, new Comparator<Parco>() {
 				      public int compare(Parco a, Parco b) {
 				          double dist1 = distFrom(a.getLatitude(), 
-				                  a.getLongitude(), 
+				                  a.getLongitude(),
 				                  gps.getLatitude(), 
 				                  gps.getLongitude());
 				          double dist2 = distFrom(b.getLatitude(), 

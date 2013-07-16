@@ -10,7 +10,7 @@
         android:layout_height="184dp" >
 
         <ImageView
-            android:id="@+id/Foto"
+            android:id="@+id/Photo"
             android:layout_width="174dp"
             android:layout_height="174dp"
             android:src="@drawable/ic_launcher" />
@@ -21,7 +21,7 @@
             android:orientation="vertical" >
 
             <Button
-                android:id="@+id/Vota"
+                android:id="@+id/Vote"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Vota" />
@@ -31,21 +31,21 @@
                 android:layout_height="52dp" >
 
                 <ImageView
-                    android:id="@+id/Voto1"
+                    android:id="@+id/Vote1"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_weight="0.34"
                     android:src="@drawable/ic_launcher" />
 
                 <ImageView
-                    android:id="@+id/Voto2"
+                    android:id="@+id/Vote2"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_weight="0.33"
                     android:src="@drawable/ic_launcher" />
 
                 <ImageView
-                    android:id="@+id/Voto3"
+                    android:id="@+id/Vote3"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_weight="0.36"
@@ -53,7 +53,7 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/textNumVoti"
+                android:id="@+id/textVoteNum"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="0.36" />
@@ -73,7 +73,7 @@
             android:layout_weight="0.08" />
 
         <TextView
-            android:id="@+id/textIndirizzo"
+            android:id="@+id/textAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.17" />
@@ -85,7 +85,7 @@
             android:layout_weight="0.28" />
 
         <TextView
-            android:id="@+id/textCoordinate"
+            android:id="@+id/textCoordinates"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.17" />
@@ -97,7 +97,7 @@
         android:orientation="vertical" >
 
         <Button
-            android:id="@+id/Indicazioni"
+            android:id="@+id/Indicazions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Indicazioni Stradali" />

@@ -42,24 +42,24 @@ public final class R {
     }
     public static final class id {
         public static final int AddPlace=0x7f09000b;
-        public static final int Foto=0x7f090000;
-        public static final int Indicazioni=0x7f09000a;
+        public static final int Indicazions=0x7f09000a;
         public static final int NearSort=0x7f09000e;
+        public static final int Photo=0x7f090000;
         public static final int SearchPlace=0x7f09000d;
         public static final int SearchText=0x7f09000c;
-        public static final int Vota=0x7f090001;
+        public static final int Vote=0x7f090001;
+        public static final int Vote1=0x7f090002;
+        public static final int Vote2=0x7f090003;
+        public static final int Vote3=0x7f090004;
         public static final int VoteSort=0x7f09000f;
-        public static final int Voto1=0x7f090002;
-        public static final int Voto2=0x7f090003;
-        public static final int Voto3=0x7f090004;
         public static final int action_settings=0x7f090012;
         public static final int listTextView=0x7f090011;
         public static final int parksListView=0x7f090010;
+        public static final int textAddress=0x7f090007;
         public static final int textCity=0x7f090008;
-        public static final int textCoordinate=0x7f090009;
-        public static final int textIndirizzo=0x7f090007;
+        public static final int textCoordinates=0x7f090009;
         public static final int textName=0x7f090006;
-        public static final int textNumVoti=0x7f090005;
+        public static final int textVoteNum=0x7f090005;
     }
     public static final class layout {
         public static final int activity_park_detail=0x7f030000;

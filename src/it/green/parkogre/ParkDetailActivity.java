@@ -2,44 +2,38 @@ package it.green.parkogre;
 
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.content.DialogInterface;
 
 public class ParkDetailActivity extends Activity 
 {
-	private GPS		  gps		  	 = null;
-	private TextView  textName    	 = null;
-	private TextView  textCity    	 = null;
-	private TextView  textIndirizzo  = null;
-	private TextView  textCoordinate = null;
-	private TextView  textNumVoti    = null;
-	private ImageView photo       	 = null;
-	private ImageView vote1 	 	 = null;
-	private ImageView vote2 	 	 = null;
-	private ImageView vote3 	     = null;
-	private Button    toVote	     = null;
-	private Button    indications    = null;
-	private double	  votoAttuale          ;
-	private int       numvoti              ;
+	private GPS		  gps		  	  = null;
+	private TextView  textName    	  = null;
+	private TextView  textCity    	  = null;
+	private TextView  textAddress     = null;
+	private TextView  textCoordinates = null;
+	private TextView  textVoteNum     = null;
+	private ImageView photo       	  = null;
+	private ImageView vote1 	 	  = null;
+	private ImageView vote2 	 	  = null;
+	private ImageView vote3 	      = null;
+	private Button    toVote	      = null;
+	private Button    indications     = null;
+	private double	  votoAttuale           ;
+	private int       numvoti               ;
 	
 	
 
@@ -53,26 +47,26 @@ public class ParkDetailActivity extends Activity
 		/**********Taking Layouts from XML Files*******/
 		textName 	    = (TextView) 	findViewById(R.id.textName           );
 		textCity 	    = (TextView) 	findViewById(R.id.textCity           );
-		textIndirizzo 	= (TextView) 	findViewById(R.id.textIndirizzo      );
-		textCoordinate 	= (TextView) 	findViewById(R.id.textCoordinate     );
-		textNumVoti     = (TextView)    findViewById(R.id.textNumVoti        );
-		photo 		    = (ImageView) 	findViewById(R.id.Foto               );
-		vote1 		    = (ImageView) 	findViewById(R.id.Voto1              );
-		vote2 		    = (ImageView) 	findViewById(R.id.Voto2              );
-		vote3 		    = (ImageView) 	findViewById(R.id.Voto3              );
-		toVote 		    = (Button) 		findViewById(R.id.Vota               );
-		indications     = (Button) 		findViewById(R.id.Indicazioni        );
+		textAddress     = (TextView) 	findViewById(R.id.textAddress        );
+		textCoordinates = (TextView) 	findViewById(R.id.textCoordinates    );
+		textVoteNum     = (TextView)    findViewById(R.id.textVoteNum        );
+		photo 		    = (ImageView) 	findViewById(R.id.Photo              );
+		vote1 		    = (ImageView) 	findViewById(R.id.Vote1              );
+		vote2 		    = (ImageView) 	findViewById(R.id.Vote2              );
+		vote3 		    = (ImageView) 	findViewById(R.id.Vote3              );
+		toVote 		    = (Button) 		findViewById(R.id.Vote               );
+		indications     = (Button) 		findViewById(R.id.Indicazions        );
 		
 		/**********Taking values from previous activity variables*********/
-		votoAttuale     =                        getIntent().getDoubleExtra("votoattuale", 0  );
-		numvoti         =                        getIntent().getIntExtra   ("numvoti"    , 0  );
+		votoAttuale     =                        getIntent().getDoubleExtra("votoattuale", 0);
+		numvoti         =                        getIntent().getIntExtra("numvoti", 0);
 		textName.       setText("Nome: "       + getIntent().getStringExtra("nomeparco"      ));
-		textCity.       setText("Città: "      + getIntent().getStringExtra("city"           ));
-		textIndirizzo.  setText("Indirizzo: "  + getIntent().getStringExtra("indirizzoparco" ));
-		textCoordinate. setText("Coordinate: " + getIntent().getStringExtra("coordinate"     ));
+		textCity.       setText("Città: " + getIntent().getStringExtra("city"));
+		textAddress.    setText("Indirizzo: " + getIntent().getStringExtra("indirizzoparco"));
+		textCoordinates. setText("Coordinate: " + getIntent().getStringExtra("coordinate"));
 		
 		/****It writes number of votes using numvoti int variable****/
-		textNumVoti.setText("Numero Voti: " +Integer.toString(numvoti));
+		textVoteNum.setText("Numero Voti: " + Integer.toString(numvoti));
 				
 		/**********Set button listeners*********/
 		addListenerOnButtons(this);
@@ -86,7 +80,7 @@ public class ParkDetailActivity extends Activity
 		}
 		
 		/**********Set users' vote*********/
-		showVote(/*votoAttuale*/0.25);
+		showVote(votoAttuale);
 		
 		
 	    
