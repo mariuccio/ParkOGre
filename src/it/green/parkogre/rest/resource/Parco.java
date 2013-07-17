@@ -4,6 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Parco implements Resource {
+    private static String id;
 	private static String numVoti;
 	private static String votoAttuale;
 	private static String city;
@@ -19,7 +20,18 @@ public class Parco implements Resource {
 	public Parco(JSONObject jsonObject) {
 		this.jsonObject = jsonObject;
 	}
-	
+
+
+
+    public int getId() {
+        int result=0;
+        try{
+            result = jsonObject.getInt("id");
+        } catch (JSONException e) {
+        }
+        return result;
+    }
+
 	public int getNumVoti() {
 		int result = 0;
 		try {

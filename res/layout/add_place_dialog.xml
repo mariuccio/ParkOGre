@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" >
+
+    <TextView
+            android:id="@+id/text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#FFF"/>
+
+    <Button
+            android:id="@+id/AddParkButton"
+            android:layout_width="118dp"
+            android:layout_height="wrap_content"
+            android:text="Add Park"
+            android:layout_alignLeft="@+id/text" android:layout_alignTop="@+id/text"/>
+
+    <Button
+            android:id="@+id/NoAddParkButton"
+            android:layout_width="118dp"
+            android:layout_height="wrap_content"
+            android:text="Don't add this Park"
+            android:layout_alignRight="@+id/text" android:layout_alignTop="@+id/text"/>
+    <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add Park's Name Here"
+            android:id="@+id/ParkNameText" android:layout_toRightOf="@+id/AddParkButton"
+            android:layout_alignParentTop="true" android:layout_marginTop="64dp" android:layout_alignLeft="@+id/text"
+            android:layout_alignRight="@+id/text"/>
+
+</RelativeLayout>

@@ -1,33 +1,25 @@
 package it.green.parkogre;
 
 
-import it.green.parkogre.rest.ParcoAPI;
-import it.green.parkogre.rest.resource.Parco;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-
-import org.json.JSONArray;
-
-import android.os.AsyncTask;
-import android.os.Bundle;
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.util.Log;
+import android.os.AsyncTask;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.*;
+import it.green.parkogre.rest.ParcoAPI;
+import it.green.parkogre.rest.resource.Parco;
+import org.json.JSONArray;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class ParksListActivity extends Activity 
 {
@@ -70,20 +62,21 @@ public class ParksListActivity extends Activity
 				Parco park = (Parco) adapter.getItemAtPosition(position);
 				Intent intent = new Intent(ParksListActivity.this, ParkDetailActivity.class);
 				//variables for opening activity
-				intent.putExtra("numvoti",  park.getNumVoti());
-				intent.putExtra("votoattuale",  park.getvotoAttuale());
-				intent.putExtra("city",  park.getCity());
-				intent.putExtra("nomeparco", park.getNomeParco());
-				intent.putExtra("indirizzoparco",  park.getIndirizzoParco());
-				intent.putExtra("coordinate",  park.getCoordinate());
-				intent.putExtra("imageurl",  park.getImageURL());
-				intent.putExtra("latitudine",  park.getLatitude());
-				intent.putExtra("longitudine",  park.getLongitude());
+                intent.putExtra("id",             park.getId());
+				intent.putExtra("numvoti",        park.getNumVoti());
+				intent.putExtra("votoattuale",    park.getvotoAttuale());
+				intent.putExtra("city",           park.getCity());
+				intent.putExtra("nomeparco",      park.getNomeParco());
+				intent.putExtra("indirizzoparco", park.getIndirizzoParco());
+				intent.putExtra("coordinate",     park.getCoordinate());
+				intent.putExtra("imageurl",       park.getImageURL());
+				intent.putExtra("latitudine",     park.getLatitude());
+				intent.putExtra("longitudine",    park.getLongitude());
 				startActivity(intent);
 			}
 		});
 		fetchParks(resultList);
-		addListenerOnButtons();
+		addListenerOnButtons(this);
 	}
 	
 	 public static double distFrom(double lat1, double lng1, double lat2, double lng2) 
@@ -102,31 +95,52 @@ public class ParksListActivity extends Activity
 	     return dist * meterConversion;
 	 }
 	
-	public void addListenerOnButtons()
+	public void addListenerOnButtons(final Context context)
 	{
 		addPlace.setOnClickListener(new OnClickListener() 
 		{ 
 			public void onClick(View arg0) 
 			{			
-					gps.getLatitude();
-					gps.getLongitude();
-					Toast.makeText(ParksListActivity.this,
-					"addPlaceButton is clicked!"+"lat: "+gps.getLatitude()+"long: "+gps.getLongitude(), Toast.LENGTH_SHORT).show();
-					//google account 
-					//comunica latitudine e longitudine al server 
+				gps.getLatitude();
+				gps.getLongitude();
+//				Toast.makeText(ParksListActivity.this,
+//				"addPlaceButton is clicked!"+"lat: "+gps.getLatitude()+"long: "+gps.getLongitude(), Toast.LENGTH_SHORT).show();
+				//google account
+				//comunica latitudine e longitudine al server
+                final Dialog dialog = new Dialog(context);
+                dialog.setContentView(R.layout.add_place_dialog);
+                dialog.setTitle("Add the Park where you are");
+
+                EditText parkNameText = (EditText) dialog.findViewById(R.id.ParkNameText);
+
+                Button addParkButton = (Button) dialog.findViewById(R.id.AddParkButton);
+                addParkButton.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //aggiungo il parco vedendo il nome in parkNameText e passo al server lat long e nome
+                    }
+                });
+
+                Button noAddParkButton = (Button) dialog.findViewById(R.id.NoAddParkButton);
+                noAddParkButton.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.show();
+            }
 				   	 
-			} 
 		});
 		
 		searchPlace.setOnClickListener(new OnClickListener() 
 		{ 
 			public void onClick(View arg0) 
 			{
-                   parks.clear();
-				   Toast.makeText(ParksListActivity.this,
-					"searchPlaceButton is clicked!", Toast.LENGTH_SHORT).show();
-				   //da gestire nel thread
-				   fetchParksSearch(resultList);	 
+                Toast.makeText(ParksListActivity.this,
+					"latitude: "+gps.getLatitude()+" longitude: "+gps.getLongitude(), Toast.LENGTH_SHORT).show();
+				fetchParksSearch(resultList);
 			} 
 		});
 		
@@ -134,8 +148,8 @@ public class ParksListActivity extends Activity
 		{ 
 			public void onClick(View arg0) 
 			{
-                    Toast.makeText(ParksListActivity.this,
-					"nearSortButton is clicked!", Toast.LENGTH_SHORT).show();
+//                  Toast.makeText(ParksListActivity.this,
+//					"nearSortButton is clicked!", Toast.LENGTH_SHORT).show();
 					//ordina per vicinanza
 				
 					Collections.sort(parks, new Comparator<Parco>() {
@@ -167,8 +181,8 @@ public class ParksListActivity extends Activity
 		{ 
 			public void onClick(View arg0) 
 			{				 
-				   Toast.makeText(ParksListActivity.this,
-					"voteSortButton is clicked!", Toast.LENGTH_SHORT).show();
+//				    Toast.makeText(ParksListActivity.this,
+//					"voteSortButton is clicked!", Toast.LENGTH_SHORT).show();
 					//ordina per voto
 				   	Collections.sort(parks, new Comparator<Parco>() {
 			         public int compare(Parco a, Parco b) {
@@ -202,12 +216,12 @@ public class ParksListActivity extends Activity
 	{
 		new FetchParksTask().execute();
 	}
-	public void fetchParksSearch(View v) 
+	public void fetchParksSearch(View v)
 	{
 		new FetchParksSearchTask().execute();
 	}
 	
-	private class FetchParksTask extends AsyncTask<Void, Void, ArrayList<Parco>> 
+	private class FetchParksTask extends AsyncTask<Void, Void, ArrayList<Parco>>
 	{
 		@Override
 		protected void onPreExecute() 
@@ -225,7 +239,7 @@ public class ParksListActivity extends Activity
 		}
 
 		@Override
-		protected ArrayList<Parco> doInBackground(Void... params) 
+		protected ArrayList<Parco> doInBackground(Void... params)
 		{
 			parks = new ArrayList<Parco>();
 			
@@ -255,7 +269,7 @@ public class ParksListActivity extends Activity
 		}
 		
 		@Override
-		protected void onPostExecute(ArrayList<Parco> parks) 
+		protected void onPostExecute(ArrayList<Parco> parks)
 		{
 			searchPlace.setEnabled(true);
 			addPlace.	setEnabled(true);
@@ -265,7 +279,7 @@ public class ParksListActivity extends Activity
 			adapter.clear();
 			if(parks!=null) 
 			{
-				for (Parco park : parks) 
+				for (Parco park : parks)
 				{
 					adapter.add(park);
 				}
@@ -275,7 +289,7 @@ public class ParksListActivity extends Activity
 			super.onPostExecute(parks);
 		}
 	}
-	private class FetchParksSearchTask extends AsyncTask<Void, Void, ArrayList<Parco>> 
+	private class FetchParksSearchTask extends AsyncTask<Void, Void, ArrayList<Parco>>
 	{
 		@Override
 		protected void onPreExecute() 
@@ -293,13 +307,14 @@ public class ParksListActivity extends Activity
 		}
 
 		@Override
-		protected ArrayList<Parco> doInBackground(Void... params) 
+		protected ArrayList<Parco> doInBackground(Void... params)
 		{
 			//ArrayList<Parco> parks = new ArrayList<Parco>();
 			//comunica il valore al server e attende il risultato
 			
 			try 
 			{
+                parks.clear();
 				// Parse JSONObject as simple text and put values inside adapter
 				JSONArray jsonResult = new JSONArray(new ParcoAPI().getParks(searchText.getText().toString()));
 //				if(jsonResult==null)
@@ -319,7 +334,7 @@ public class ParksListActivity extends Activity
 		}
 		
 		@Override
-		protected void onPostExecute(ArrayList<Parco> parks) 
+		protected void onPostExecute(ArrayList<Parco> parks)
 		{
 			searchPlace.setEnabled(true);
 			addPlace.	setEnabled(true);
@@ -329,7 +344,7 @@ public class ParksListActivity extends Activity
 			adapter.    clear();
 			if (parks!=null)
 			{
-				for (Parco park : parks) 
+				for (Parco park : parks)
 				{
 					adapter.add(park);
 				}	
@@ -341,13 +356,13 @@ public class ParksListActivity extends Activity
 
 
 
-	public void fetchParksOrder(View v) 
+	public void fetchParksOrder(View v)
 	{
 		new FetchParksOrderTask().execute();
 	}
 	
 	
-	private class FetchParksOrderTask extends AsyncTask<Void, Void, ArrayList<Parco>> 
+	private class FetchParksOrderTask extends AsyncTask<Void, Void, ArrayList<Parco>>
 	{
 		@Override
 		protected void onPreExecute() 
@@ -365,7 +380,7 @@ public class ParksListActivity extends Activity
 		}
 	
 		@Override
-		protected ArrayList<Parco> doInBackground(Void... params) 
+		protected ArrayList<Parco> doInBackground(Void... params)
 		{
 			/*parks = new ArrayList<Parco>();
 			
@@ -396,7 +411,7 @@ public class ParksListActivity extends Activity
 		}
 		
 		@Override
-		protected void onPostExecute(ArrayList<Parco> parks) 
+		protected void onPostExecute(ArrayList<Parco> parks)
 		{
 			searchPlace.setEnabled(true);
 			addPlace.	setEnabled(true);
@@ -407,7 +422,7 @@ public class ParksListActivity extends Activity
 			
 			if(parks!=null) 
 			{
-				for (Parco park : parks) 
+				for (Parco park : parks)
 				{
 					adapter.add(park);
 				}

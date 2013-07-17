@@ -3,12 +3,15 @@ package it.green.parkogre;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 
+import android.app.Dialog;
 import android.app.Activity;
-import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,7 +19,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.content.DialogInterface;
+import it.green.parkogre.rest.ParcoAPI;
+import it.green.parkogre.rest.resource.Parco;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class ParkDetailActivity extends Activity 
 {
@@ -34,9 +40,18 @@ public class ParkDetailActivity extends Activity
 	private Button    indications     = null;
 	private double	  votoAttuale           ;
 	private int       numvoti               ;
-	
-	
-
+    private int       id                    ;
+	private static String ok;
+    private ProgressDialog 		progressdialog 		= null;
+    private Dialog dialog = null;
+    private Button vote0Button = null;
+    private Button vote1Button = null;
+    private Button vote2Button = null;
+    private Button vote3Button = null;
+    private Button vote4Button = null;
+    private Button vote5Button = null;
+    private Button vote6Button = null;
+    private Button noVoteButton = null;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
 	{
@@ -58,6 +73,7 @@ public class ParkDetailActivity extends Activity
 		indications     = (Button) 		findViewById(R.id.Indicazions        );
 		
 		/**********Taking values from previous activity variables*********/
+        id              =                        getIntent().getIntExtra("id", 0);
 		votoAttuale     =                        getIntent().getDoubleExtra("votoattuale", 0);
 		numvoti         =                        getIntent().getIntExtra("numvoti", 0);
 		textName.       setText("Nome: "       + getIntent().getStringExtra("nomeparco"      ));
@@ -214,25 +230,25 @@ public class ParkDetailActivity extends Activity
 		{
 			vote1.setImageResource(R.drawable.marghe4su4);
 			vote2.setImageResource(R.drawable.marghe4su4);
-			vote1.setImageResource(R.drawable.marghe1su4);
+			vote3.setImageResource(R.drawable.marghe1su4);
 		}
 		if (x<5.5 && x>5.25)
 		{
 			vote1.setImageResource(R.drawable.marghe4su4);
 			vote2.setImageResource(R.drawable.marghe4su4);
-			vote1.setImageResource(R.drawable.marghe2su4);
+			vote3.setImageResource(R.drawable.marghe2su4);
 		}
 		if (x<5.75 && x>=5.5)
 		{
 			vote1.setImageResource(R.drawable.marghe4su4);
 			vote2.setImageResource(R.drawable.marghe4su4);
-			vote1.setImageResource(R.drawable.marghe3su4);
+			vote3.setImageResource(R.drawable.marghe3su4);
 		}
 		if (x<=6 && x>=5.75)
 		{
 			vote1.setImageResource(R.drawable.marghe4su4);
 			vote2.setImageResource(R.drawable.marghe4su4);
-			vote1.setImageResource(R.drawable.marghe4su4);
+			vote3.setImageResource(R.drawable.marghe4su4);
 		}
 	}
 	
@@ -242,21 +258,90 @@ public class ParkDetailActivity extends Activity
 		toVote.setOnClickListener(new OnClickListener() 
 		{ 
 			public void onClick(View arg0) 
-			{				 
-				   Toast.makeText(ParkDetailActivity.this,
-					"Work In Progress!", Toast.LENGTH_SHORT).show();
-				   //login (secondo me è meglio farlo all'inizio)
-				   //menu da 0 a 6?	 
-				   //spedisco valore al server
-				   AlertDialog.Builder adb=new AlertDialog.Builder(context);
-				   adb.setTitle("Vote this Park");
-				   adb.setMessage("Choose from 0 to 6");
-				   adb.setNeutralButton("I don't want to vote", new DialogInterface.OnClickListener() {
-				        public void onClick(DialogInterface dialog, int which) { 
-				            // do nothing
-				        }
-				     });
-				   adb.show();
+			{
+                dialog = new Dialog(ParkDetailActivity.this);
+                dialog.setContentView(R.layout.vote_dialog);
+                dialog.setTitle("Vote this Park, from 0 to 6");
+                vote0Button = (Button) dialog.findViewById(R.id.Vote0Button);
+                vote1Button = (Button) dialog.findViewById(R.id.Vote1Button);
+                vote2Button = (Button) dialog.findViewById(R.id.Vote2Button);
+                vote3Button = (Button) dialog.findViewById(R.id.Vote3Button);
+                vote4Button = (Button) dialog.findViewById(R.id.Vote4Button);
+                vote5Button = (Button) dialog.findViewById(R.id.Vote5Button);
+                vote6Button = (Button) dialog.findViewById(R.id.Vote6Button);
+                noVoteButton = (Button) dialog.findViewById(R.id.NoVoteButton);
+
+                vote0Button.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        votePark(id,0);
+                        dialog.dismiss();
+                    }
+                });
+
+
+                vote1Button.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        votePark(id,1);
+                        dialog.dismiss();
+                    }
+                });
+
+
+                vote2Button.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        votePark(id,2);
+                        dialog.dismiss();
+                    }
+                });
+
+
+                vote3Button.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        votePark(id,3);
+                        dialog.dismiss();
+                    }
+                });
+
+
+                vote4Button.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        votePark(id,4);
+                        dialog.dismiss();
+                    }
+                });
+
+
+                vote5Button.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        votePark(id,5);
+                        dialog.dismiss();
+                    }
+                });
+
+
+                vote6Button.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        votePark(id,6);
+                        dialog.dismiss();
+                    }
+                });
+
+
+                noVoteButton.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.show();
 			} 
 		});
 		/***On click it shows an activity where the user can see google maps indications from his location to the park***/
@@ -279,5 +364,59 @@ public class ParkDetailActivity extends Activity
 		URL newurl = new URL(url); 
 		Bitmap mIcon_val = BitmapFactory.decodeStream(newurl.openConnection() .getInputStream()); 
 		photo.setImageBitmap(mIcon_val);
-	}	
+	}
+
+    public void votePark(int id, int vote)
+    {
+        new VoteParkTask().execute(id,vote);
+    }
+
+    private class VoteParkTask extends AsyncTask<Integer, Void, Void>
+    {
+        protected void onPreExecute()
+        {
+            progressdialog = new ProgressDialog(ParkDetailActivity.this);
+            progressdialog.setIndeterminate(true);
+            progressdialog.setIndeterminateDrawable(getResources().getDrawable(R.anim.anim_progress_bar));
+            progressdialog.setMessage("Caricamento...");
+            progressdialog.show();
+            vote0Button.setEnabled(false);
+            vote1Button.setEnabled(false);
+            vote2Button.setEnabled(false);
+            vote3Button.setEnabled(false);
+            vote4Button.setEnabled(false);
+            vote5Button.setEnabled(false);
+            vote6Button.setEnabled(false);
+            noVoteButton.setEnabled(false);
+        }
+
+
+        protected Void doInBackground(Integer... i)
+        {
+            try
+            {
+                JSONObject jsonResult = new JSONObject(new ParcoAPI().votePark(i[0],i[1]));
+            }
+            catch (Exception e)
+            {
+
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result)
+        {
+
+            vote0Button.setEnabled(true);
+            vote1Button.setEnabled(true);
+            vote2Button.setEnabled(true);
+            vote3Button.setEnabled(true);
+            vote4Button.setEnabled(true);
+            vote5Button.setEnabled(true);
+            vote6Button.setEnabled(true);
+            noVoteButton.setEnabled(true);
+            progressdialog.cancel();
+        }
+    }
 }

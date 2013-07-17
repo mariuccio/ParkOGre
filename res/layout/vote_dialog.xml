@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" >
+
+    <TextView
+            android:id="@+id/text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#FFF"/>
+
+    <Button
+            android:id="@+id/NoVoteButton"
+            android:layout_width="182dp"
+            android:layout_height="wrap_content"
+            android:text="I don't want to vote"
+            android:layout_alignLeft="@+id/Vote1Button" android:layout_below="@+id/Vote3Button"
+            android:layout_alignRight="@+id/text"/>
+    <Button android:id="@+id/Vote0Button" android:layout_width="96dp" android:layout_height="wrap_content"
+            android:text="0"
+            android:layout_alignLeft="@+id/text" android:layout_below="@+id/text"/>
+    <Button android:id="@+id/Vote1Button" android:layout_width="96dp" android:layout_height="wrap_content" android:text="1"
+            android:layout_centerHorizontal="true" android:layout_below="@+id/text"/>
+    <Button android:id="@+id/Vote2Button" android:layout_width="96dp" android:layout_height="wrap_content" android:text="2"
+            android:layout_alignRight="@+id/text" android:layout_below="@+id/text"/>
+    <Button android:id="@+id/Vote3Button" android:layout_width="96dp" android:layout_height="wrap_content" android:text="3"
+            android:layout_alignLeft="@+id/text" android:layout_below="@+id/Vote0Button"/>
+    <Button android:id="@+id/Vote4Button" android:layout_width="96dp" android:layout_height="wrap_content" android:text="4"
+            android:layout_alignLeft="@+id/Vote1Button" android:layout_above="@+id/NoVoteButton"/>
+    <Button android:id="@+id/Vote6Button" android:layout_width="96dp" android:layout_height="wrap_content" android:text="6"
+            android:layout_alignLeft="@+id/text" android:layout_alignTop="@+id/NoVoteButton"/>
+    <Button android:id="@+id/Vote5Button" android:layout_width="96dp" android:layout_height="wrap_content"
+            android:text="5" android:layout_alignRight="@+id/text" android:layout_below="@+id/Vote0Button"/>
+
+</RelativeLayout>

@@ -8,13 +8,11 @@ import java.io.Reader;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
-import java.util.Map;
-
-import com.google.gson.Gson;
 
 public class ParcoAPI extends RestClient {
 	private static final String GET_START_PARKS = "http://10.0.2.2:8080/park/search/gps/";
 	private static final String GET_PARKS = "http://10.0.2.2:8080/park/search/query/";
+    private static final String VOTE_PARK = "http://10.0.2.2:8080/park/feed/";
 	
 	/* API calls */
 	public static String getStartParks(double d, double f) {
@@ -71,4 +69,20 @@ public class ParcoAPI extends RestClient {
 		}
 		return response;
 	}
+
+    public static String votePark(int id, int vote) {
+        InputStream is = null;
+
+        try {
+            is = new URL(ParcoAPI.VOTE_PARK + id + "/" + vote).openStream();
+            BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
+            String jsonText = readAll(rd);
+            is.close();
+            return jsonText;
+
+        } catch(IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }
