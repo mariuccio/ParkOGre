@@ -1,10 +1,7 @@
 package it.green.parkogre;
 
-
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-
 import android.app.Dialog;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -15,324 +12,284 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
-import it.green.parkogre.rest.ParcoAPI;
-import it.green.parkogre.rest.resource.Parco;
-import org.json.JSONArray;
+import android.widget.*;
+import it.green.parkogre.rest.ParkAPI;
 import org.json.JSONObject;
 
-public class ParkDetailActivity extends Activity 
-{
-	private GPS		  gps		  	  = null;
-	private TextView  textName    	  = null;
-	private TextView  textCity    	  = null;
-	private TextView  textAddress     = null;
-	private TextView  textCoordinates = null;
-	private TextView  textVoteNum     = null;
-	private ImageView photo       	  = null;
-	private ImageView vote1 	 	  = null;
-	private ImageView vote2 	 	  = null;
-	private ImageView vote3 	      = null;
-	private Button    toVote	      = null;
-	private Button    indications     = null;
-	private double	  votoAttuale           ;
-	private int       numvoti               ;
-    private int       id                    ;
-	private static String ok;
-    private ProgressDialog 		progressdialog 		= null;
-    private Dialog dialog = null;
-    private Button vote0Button = null;
-    private Button vote1Button = null;
-    private Button vote2Button = null;
-    private Button vote3Button = null;
-    private Button vote4Button = null;
-    private Button vote5Button = null;
-    private Button vote6Button = null;
-    private Button noVoteButton = null;
-	@Override
-	protected void onCreate(Bundle savedInstanceState) 
-	{
-		/**********Standard Activity Start*************/
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_park_detail);
-		
-		/**********Taking Layouts from XML Files*******/
-		textName 	    = (TextView) 	findViewById(R.id.textName           );
-		textCity 	    = (TextView) 	findViewById(R.id.textCity           );
-		textAddress     = (TextView) 	findViewById(R.id.textAddress        );
-		textCoordinates = (TextView) 	findViewById(R.id.textCoordinates    );
-		textVoteNum     = (TextView)    findViewById(R.id.textVoteNum        );
-		photo 		    = (ImageView) 	findViewById(R.id.Photo              );
-		vote1 		    = (ImageView) 	findViewById(R.id.Vote1              );
-		vote2 		    = (ImageView) 	findViewById(R.id.Vote2              );
-		vote3 		    = (ImageView) 	findViewById(R.id.Vote3              );
-		toVote 		    = (Button) 		findViewById(R.id.Vote               );
-		indications     = (Button) 		findViewById(R.id.Indicazions        );
-		
-		/**********Taking values from previous activity variables*********/
-        id              =                        getIntent().getIntExtra("id", 0);
-		votoAttuale     =                        getIntent().getDoubleExtra("votoattuale", 0);
-		numvoti         =                        getIntent().getIntExtra("numvoti", 0);
-		textName.       setText("Nome: "       + getIntent().getStringExtra("nomeparco"      ));
-		textCity.       setText("Città: " + getIntent().getStringExtra("city"));
-		textAddress.    setText("Indirizzo: " + getIntent().getStringExtra("indirizzoparco"));
-		textCoordinates. setText("Coordinate: " + getIntent().getStringExtra("coordinate"));
-		
-		/****It writes number of votes using numvoti int variable****/
-		textVoteNum.setText("Numero Voti: " + Integer.toString(numvoti));
-				
-		/**********Set button listeners*********/
-		addListenerOnButtons(this);
-		
-		/**********Set park's image from url*********/		
-		try {
-			addPhoto(getIntent().getStringExtra("imageurl"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		/**********Set users' vote*********/
-		showVote(votoAttuale);
-		
-		
-	    
-	}
-	
-	
-	/*****Function that sets up png visibility depending on users' vote*****/
-	public void showVote(Double x)
-	{
-		if (x<0.25)
-		{
-			vote1.setImageResource(R.drawable.pescio4su4);
-			vote2.setImageResource(R.drawable.pescio4su4);
-			vote3.setImageResource(R.drawable.pescio4su4);
-		}
-		if (x<0.5 && x>=0.25)
-		{
-			vote1.setImageResource(R.drawable.pescio4su4);
-			vote2.setImageResource(R.drawable.pescio4su4);
-			vote3.setImageResource(R.drawable.pescio3su4);
-		}
-		if (x<0.75 && x>=0.5)
-		{
-			vote1.setImageResource(R.drawable.pescio4su4);
-			vote2.setImageResource(R.drawable.pescio4su4);
-			vote3.setImageResource(R.drawable.pescio2su4);
-		}
-		if (x<1 && x>=0.75)
-		{
-			vote1.setImageResource(R.drawable.pescio4su4);
-			vote2.setImageResource(R.drawable.pescio4su4);
-			vote3.setImageResource(R.drawable.pescio1su4);
-		}
-		if (x<1.25 && x>=1)
-		{
-			vote1.setImageResource(R.drawable.pescio4su4);
-			vote2.setImageResource(R.drawable.pescio4su4);
-			vote3.setVisibility(View.INVISIBLE);
-		}
-		if (x<1.5 && x>=1.25)
-		{
-			vote1.setImageResource(R.drawable.pescio4su4);
-			vote2.setImageResource(R.drawable.pescio3su4);
-			vote3.setVisibility(View.INVISIBLE);
-		}
-		if (x<1.75 && x>=1.5)
-		{
-			vote1.setImageResource(R.drawable.pescio4su4);
-			vote2.setImageResource(R.drawable.pescio2su4);
-			vote3.setVisibility(View.INVISIBLE);
-		}
-		if (x<2 && x>=1.75)
-		{
-			vote1.setImageResource(R.drawable.pescio4su4);
-			vote2.setImageResource(R.drawable.pescio1su4);
-			vote3.setVisibility(View.INVISIBLE);
-		}
-		if (x<2.25 && x>=2)
-		{
-			vote1.setImageResource(R.drawable.pescio4su4);
-			vote2.setVisibility(View.INVISIBLE);
-			vote3.setVisibility(View.INVISIBLE);
-		}
-		if (x<2.5 && x>=2.25)
-		{
-			vote1.setImageResource(R.drawable.pescio3su4);
-			vote2.setVisibility(View.INVISIBLE);
-			vote3.setVisibility(View.INVISIBLE);
-		}
-		if (x<2.75 && x>=2.5)
-		{
-			vote1.setImageResource(R.drawable.pescio2su4);
-			vote2.setVisibility(View.INVISIBLE);
-			vote3.setVisibility(View.INVISIBLE);
-		}
-		if (x<3 && x>=2.75)
-		{
-			vote1.setImageResource(R.drawable.pescio1su4);
-			vote2.setVisibility(View.INVISIBLE);
-			vote3.setVisibility(View.INVISIBLE);
-		}
-		if (x<3.25 && x>=3)
-		{
-			vote1.setImageResource(R.drawable.marghe1su4);
-			vote2.setVisibility(View.INVISIBLE);
-			vote3.setVisibility(View.INVISIBLE);
-		}
-		if (x<3.5 && x>=3.25)
-		{
-			vote1.setImageResource(R.drawable.marghe2su4);
-			vote2.setVisibility(View.INVISIBLE);
-			vote3.setVisibility(View.INVISIBLE);
-		}
-		if (x<3.75 && x>=3.5)
-		{
-			vote1.setImageResource(R.drawable.marghe3su4);
-			vote2.setVisibility(View.INVISIBLE);
-			vote3.setVisibility(View.INVISIBLE);
-		}
-		if (x<4 && x>=3.75)
-		{
-			vote1.setImageResource(R.drawable.marghe4su4);
-			vote2.setVisibility(View.INVISIBLE);
-			vote3.setVisibility(View.INVISIBLE);
-		}
-		if (x<4.25 && x>=4)
-		{
-			vote1.setImageResource(R.drawable.marghe4su4);
-			vote2.setImageResource(R.drawable.marghe1su4);
-			vote3.setVisibility(View.INVISIBLE);
-		}
-		if (x<4.5 && x>=4.25)
-		{
-			vote1.setImageResource(R.drawable.marghe4su4);
-			vote2.setImageResource(R.drawable.marghe2su4);
-			vote3.setVisibility(View.INVISIBLE);
-		}
-		if (x<4.75 && x>=4.5)
-		{
-			vote1.setImageResource(R.drawable.marghe4su4);
-			vote2.setImageResource(R.drawable.marghe3su4);
-			vote3.setVisibility(View.INVISIBLE);
-		}
-		if (x<5 && x>=4.75)
-		{
-			vote1.setImageResource(R.drawable.marghe4su4);
-			vote2.setImageResource(R.drawable.marghe4su4);
-			vote3.setVisibility(View.INVISIBLE);
-		}
-		if (x<5.25 && x>=5)
-		{
-			vote1.setImageResource(R.drawable.marghe4su4);
-			vote2.setImageResource(R.drawable.marghe4su4);
-			vote3.setImageResource(R.drawable.marghe1su4);
-		}
-		if (x<5.5 && x>5.25)
-		{
-			vote1.setImageResource(R.drawable.marghe4su4);
-			vote2.setImageResource(R.drawable.marghe4su4);
-			vote3.setImageResource(R.drawable.marghe2su4);
-		}
-		if (x<5.75 && x>=5.5)
-		{
-			vote1.setImageResource(R.drawable.marghe4su4);
-			vote2.setImageResource(R.drawable.marghe4su4);
-			vote3.setImageResource(R.drawable.marghe3su4);
-		}
-		if (x<=6 && x>=5.75)
-		{
-			vote1.setImageResource(R.drawable.marghe4su4);
-			vote2.setImageResource(R.drawable.marghe4su4);
-			vote3.setImageResource(R.drawable.marghe4su4);
-		}
-	}
-	
-	public void addListenerOnButtons(final Context context)
-	{
-		/***On click it shows a menu where the user can choose a vote from 0 to 6***/
-		toVote.setOnClickListener(new OnClickListener() 
-		{ 
-			public void onClick(View arg0) 
-			{
+public class ParkDetailActivity extends Activity {
+    private GPS             gps             = null;
+    private TextView        textName        = null;
+    private TextView        textCity        = null;
+    private TextView        textAddress     = null;
+    private TextView        textCoordinates = null;
+    private TextView        textVoteNum     = null;
+    private ImageView       photo           = null;
+    private ImageView       vote1           = null;
+    private ImageView       vote2           = null;
+    private ImageView       vote3           = null;
+    private Button          toVote          = null;
+    private Button          indications     = null;
+    private double          currentVote     = 0   ;
+    private int             voteNum         = 0   ;
+    private int             id              = 0   ;
+    private ProgressDialog  progressdialog  = null;
+    /*Vote popup*/
+    private Dialog          dialog          = null;
+    private Button          vote0Button     = null;
+    private Button          vote1Button     = null;
+    private Button          vote2Button     = null;
+    private Button          vote3Button     = null;
+    private Button          vote4Button     = null;
+    private Button          vote5Button     = null;
+    private Button          vote6Button     = null;
+    private Button          noVoteButton    = null;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        /**********Standard Activity Start*************/
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_park_detail);
+
+        /**********Taking Layouts from XML Files*******/
+        textName        =   (TextView)  findViewById(R.id.textName          );
+        textCity        =   (TextView)  findViewById(R.id.textCity          );
+        textAddress     =   (TextView)  findViewById(R.id.textAddress       );
+        textCoordinates =   (TextView)  findViewById(R.id.textCoordinates   );
+        textVoteNum     =   (TextView)  findViewById(R.id.textVoteNum       );
+        photo           =   (ImageView) findViewById(R.id.Photo             );
+        vote1           =   (ImageView) findViewById(R.id.Vote1             );
+        vote2           =   (ImageView) findViewById(R.id.Vote2             );
+        vote3           =   (ImageView) findViewById(R.id.Vote3             );
+        toVote          =   (Button)    findViewById(R.id.Vote              );
+        indications     =   (Button)    findViewById(R.id.Indications       );
+
+        /**********Taking values from previous activity variables*********/
+        id              = getIntent().getIntExtra   ("id"           , 0);
+        currentVote     = getIntent().getDoubleExtra("currentvote"  , 0);
+        voteNum         = getIntent().getIntExtra   ("votenum"      , 0);
+        textName        .setText("Name: "        + getIntent().getStringExtra("parkname"   ));
+        textCity        .setText("City: "        + getIntent().getStringExtra("city"       ));
+        textAddress     .setText("Address: "     + getIntent().getStringExtra("parkaddress"));
+        textCoordinates .setText("Coordinates: " + getIntent().getStringExtra("coordinates"));
+
+        /****It writes number of votes using voteNum int variable****/
+        textVoteNum.setText("Votes' Number: " + Integer.toString(voteNum));
+
+        /**********Set buttons' listeners*********/
+        addListenerOnButtons(this);
+
+        /**********Set park's image from url*********/
+        try {
+            addPhoto(getIntent().getStringExtra("imageurl"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        /**********Set users' graphical vote*********/
+        showVote(currentVote);
+    }
+
+
+    /**
+     * Function that sets up png visibility depending on users' vote
+     */
+    public void showVote(Double x) {
+        if (x < 0.25) {
+            vote1.setImageResource(R.drawable.pescio4su4);
+            vote2.setImageResource(R.drawable.pescio4su4);
+            vote3.setImageResource(R.drawable.pescio4su4);
+        }
+        if (x < 0.5 && x >= 0.25) {
+            vote1.setImageResource(R.drawable.pescio4su4);
+            vote2.setImageResource(R.drawable.pescio4su4);
+            vote3.setImageResource(R.drawable.pescio3su4);
+        }
+        if (x < 0.75 && x >= 0.5) {
+            vote1.setImageResource(R.drawable.pescio4su4);
+            vote2.setImageResource(R.drawable.pescio4su4);
+            vote3.setImageResource(R.drawable.pescio2su4);
+        }
+        if (x < 1 && x >= 0.75) {
+            vote1.setImageResource(R.drawable.pescio4su4);
+            vote2.setImageResource(R.drawable.pescio4su4);
+            vote3.setImageResource(R.drawable.pescio1su4);
+        }
+        if (x < 1.25 && x >= 1) {
+            vote1.setImageResource(R.drawable.pescio4su4);
+            vote2.setImageResource(R.drawable.pescio4su4);
+            vote3.setVisibility(View.INVISIBLE);
+        }
+        if (x < 1.5 && x >= 1.25) {
+            vote1.setImageResource(R.drawable.pescio4su4);
+            vote2.setImageResource(R.drawable.pescio3su4);
+            vote3.setVisibility(View.INVISIBLE);
+        }
+        if (x < 1.75 && x >= 1.5) {
+            vote1.setImageResource(R.drawable.pescio4su4);
+            vote2.setImageResource(R.drawable.pescio2su4);
+            vote3.setVisibility(View.INVISIBLE);
+        }
+        if (x < 2 && x >= 1.75) {
+            vote1.setImageResource(R.drawable.pescio4su4);
+            vote2.setImageResource(R.drawable.pescio1su4);
+            vote3.setVisibility(View.INVISIBLE);
+        }
+        if (x < 2.25 && x >= 2) {
+            vote1.setImageResource(R.drawable.pescio4su4);
+            vote2.setVisibility(View.INVISIBLE);
+            vote3.setVisibility(View.INVISIBLE);
+        }
+        if (x < 2.5 && x >= 2.25) {
+            vote1.setImageResource(R.drawable.pescio3su4);
+            vote2.setVisibility(View.INVISIBLE);
+            vote3.setVisibility(View.INVISIBLE);
+        }
+        if (x < 2.75 && x >= 2.5) {
+            vote1.setImageResource(R.drawable.pescio2su4);
+            vote2.setVisibility(View.INVISIBLE);
+            vote3.setVisibility(View.INVISIBLE);
+        }
+        if (x < 3 && x >= 2.75) {
+            vote1.setImageResource(R.drawable.pescio1su4);
+            vote2.setVisibility(View.INVISIBLE);
+            vote3.setVisibility(View.INVISIBLE);
+        }
+        if (x < 3.25 && x >= 3) {
+            vote1.setImageResource(R.drawable.marghe1su4);
+            vote2.setVisibility(View.INVISIBLE);
+            vote3.setVisibility(View.INVISIBLE);
+        }
+        if (x < 3.5 && x >= 3.25) {
+            vote1.setImageResource(R.drawable.marghe2su4);
+            vote2.setVisibility(View.INVISIBLE);
+            vote3.setVisibility(View.INVISIBLE);
+        }
+        if (x < 3.75 && x >= 3.5) {
+            vote1.setImageResource(R.drawable.marghe3su4);
+            vote2.setVisibility(View.INVISIBLE);
+            vote3.setVisibility(View.INVISIBLE);
+        }
+        if (x < 4 && x >= 3.75) {
+            vote1.setImageResource(R.drawable.marghe4su4);
+            vote2.setVisibility(View.INVISIBLE);
+            vote3.setVisibility(View.INVISIBLE);
+        }
+        if (x < 4.25 && x >= 4) {
+            vote1.setImageResource(R.drawable.marghe4su4);
+            vote2.setImageResource(R.drawable.marghe1su4);
+            vote3.setVisibility(View.INVISIBLE);
+        }
+        if (x < 4.5 && x >= 4.25) {
+            vote1.setImageResource(R.drawable.marghe4su4);
+            vote2.setImageResource(R.drawable.marghe2su4);
+            vote3.setVisibility(View.INVISIBLE);
+        }
+        if (x < 4.75 && x >= 4.5) {
+            vote1.setImageResource(R.drawable.marghe4su4);
+            vote2.setImageResource(R.drawable.marghe3su4);
+            vote3.setVisibility(View.INVISIBLE);
+        }
+        if (x < 5 && x >= 4.75) {
+            vote1.setImageResource(R.drawable.marghe4su4);
+            vote2.setImageResource(R.drawable.marghe4su4);
+            vote3.setVisibility(View.INVISIBLE);
+        }
+        if (x < 5.25 && x >= 5) {
+            vote1.setImageResource(R.drawable.marghe4su4);
+            vote2.setImageResource(R.drawable.marghe4su4);
+            vote3.setImageResource(R.drawable.marghe1su4);
+        }
+        if (x < 5.5 && x > 5.25) {
+            vote1.setImageResource(R.drawable.marghe4su4);
+            vote2.setImageResource(R.drawable.marghe4su4);
+            vote3.setImageResource(R.drawable.marghe2su4);
+        }
+        if (x < 5.75 && x >= 5.5) {
+            vote1.setImageResource(R.drawable.marghe4su4);
+            vote2.setImageResource(R.drawable.marghe4su4);
+            vote3.setImageResource(R.drawable.marghe3su4);
+        }
+        if (x <= 6 && x >= 5.75) {
+            vote1.setImageResource(R.drawable.marghe4su4);
+            vote2.setImageResource(R.drawable.marghe4su4);
+            vote3.setImageResource(R.drawable.marghe4su4);
+        }
+    }
+
+    public void addListenerOnButtons(final Context context) {
+        /***On click it shows a menu where the user can choose a vote from 0 to 6***/
+        toVote.setOnClickListener(new OnClickListener() {
+            public void onClick(View arg0) {
+                /*vote dialog's initialization*/
                 dialog = new Dialog(ParkDetailActivity.this);
                 dialog.setContentView(R.layout.vote_dialog);
                 dialog.setTitle("Vote this Park, from 0 to 6");
-                vote0Button = (Button) dialog.findViewById(R.id.Vote0Button);
-                vote1Button = (Button) dialog.findViewById(R.id.Vote1Button);
-                vote2Button = (Button) dialog.findViewById(R.id.Vote2Button);
-                vote3Button = (Button) dialog.findViewById(R.id.Vote3Button);
-                vote4Button = (Button) dialog.findViewById(R.id.Vote4Button);
-                vote5Button = (Button) dialog.findViewById(R.id.Vote5Button);
-                vote6Button = (Button) dialog.findViewById(R.id.Vote6Button);
-                noVoteButton = (Button) dialog.findViewById(R.id.NoVoteButton);
+
+                /*vote dialog's buttons' initialization*/
+                vote0Button     = (Button) dialog.findViewById(R.id.Vote0Button );
+                vote1Button     = (Button) dialog.findViewById(R.id.Vote1Button );
+                vote2Button     = (Button) dialog.findViewById(R.id.Vote2Button );
+                vote3Button     = (Button) dialog.findViewById(R.id.Vote3Button );
+                vote4Button     = (Button) dialog.findViewById(R.id.Vote4Button );
+                vote5Button     = (Button) dialog.findViewById(R.id.Vote5Button );
+                vote6Button     = (Button) dialog.findViewById(R.id.Vote6Button );
+                noVoteButton    = (Button) dialog.findViewById(R.id.NoVoteButton);
 
                 vote0Button.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        votePark(id,0);
+                        votePark(id, 0);
                         dialog.dismiss();
                     }
                 });
-
 
                 vote1Button.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        votePark(id,1);
+                        votePark(id, 1);
                         dialog.dismiss();
                     }
                 });
-
 
                 vote2Button.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        votePark(id,2);
+                        votePark(id, 2);
                         dialog.dismiss();
                     }
                 });
-
 
                 vote3Button.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        votePark(id,3);
+                        votePark(id, 3);
                         dialog.dismiss();
                     }
                 });
-
 
                 vote4Button.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        votePark(id,4);
+                        votePark(id, 4);
                         dialog.dismiss();
                     }
                 });
-
 
                 vote5Button.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        votePark(id,5);
+                        votePark(id, 5);
                         dialog.dismiss();
                     }
                 });
-
 
                 vote6Button.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        votePark(id,6);
+                        votePark(id, 6);
                         dialog.dismiss();
                     }
                 });
-
 
                 noVoteButton.setOnClickListener(new OnClickListener() {
                     @Override
@@ -342,80 +299,73 @@ public class ParkDetailActivity extends Activity
                 });
 
                 dialog.show();
-			} 
-		});
-		/***On click it shows an activity where the user can see google maps indications from his location to the park***/
-		indications.setOnClickListener(new OnClickListener() 
-		{ 
-			public void onClick(View arg0) 
-			{				 
-				   Toast.makeText(ParkDetailActivity.this,
-					"Work In Progress!", Toast.LENGTH_SHORT).show();
-//				   Intent navigation = new Intent(Intent.ACTION_VIEW, Uri.parse("http://maps.google.com/maps?+" +
-//					          "saddr="+gps.getLatitude()+","+gps.getLongitude()+"&daddr="+ getIntent().getStringExtra("latitude" )+","+ getIntent().getStringExtra("longitude" )));
-//					         startActivity(navigation);
-				   //intento a google maps	 
-			} 
-		});
-	}
-	/***Function that takes photo from the url and puts it in the imageview***/
-	public void addPhoto(String url) throws IOException
-	{
-		URL newurl = new URL(url); 
-		Bitmap mIcon_val = BitmapFactory.decodeStream(newurl.openConnection() .getInputStream()); 
-		photo.setImageBitmap(mIcon_val);
-	}
+            }
+        });
 
-    public void votePark(int id, int vote)
-    {
-        new VoteParkTask().execute(id,vote);
+        /***On click it shows an activity where the user can see google maps indications from his location to the park***/
+        indications.setOnClickListener(new OnClickListener() {
+            public void onClick(View arg0) {
+                Toast.makeText(ParkDetailActivity.this, "Work In Progress!", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
-    private class VoteParkTask extends AsyncTask<Integer, Void, Void>
-    {
-        protected void onPreExecute()
-        {
+    /**
+     * Function that takes photo from the url and puts it in the imageview
+     */
+    public void addPhoto(String url) throws IOException {
+        URL newurl = new URL(url);
+        Bitmap mIcon_val = BitmapFactory.decodeStream(newurl.openConnection().getInputStream());
+        photo.setImageBitmap(mIcon_val);
+    }
+
+    /*AsyncTask for vote's server-client connection*/
+    public void votePark(int id, int vote) {
+        new VoteParkTask().execute(id, vote);
+    }
+
+    private class VoteParkTask extends AsyncTask<Integer, Void, String> {
+        protected void onPreExecute() {
             progressdialog = new ProgressDialog(ParkDetailActivity.this);
             progressdialog.setIndeterminate(true);
             progressdialog.setIndeterminateDrawable(getResources().getDrawable(R.anim.anim_progress_bar));
             progressdialog.setMessage("Caricamento...");
             progressdialog.show();
-            vote0Button.setEnabled(false);
-            vote1Button.setEnabled(false);
-            vote2Button.setEnabled(false);
-            vote3Button.setEnabled(false);
-            vote4Button.setEnabled(false);
-            vote5Button.setEnabled(false);
-            vote6Button.setEnabled(false);
-            noVoteButton.setEnabled(false);
+            vote0Button   .setEnabled(false);
+            vote1Button   .setEnabled(false);
+            vote2Button   .setEnabled(false);
+            vote3Button   .setEnabled(false);
+            vote4Button   .setEnabled(false);
+            vote5Button   .setEnabled(false);
+            vote6Button   .setEnabled(false);
+            noVoteButton  .setEnabled(false);
+        }
+
+        protected String doInBackground(Integer... i) {
+            String result;
+            try {
+                JSONObject jsonResult = new JSONObject(new ParkAPI().votePark(i[0], i[1]));
+                if(jsonResult.getBoolean("ok"))
+                    result = "Good vote";
+                else
+                    result = "Something went wrong";
+            } catch (Exception e) {
+                result = "Something went wrong with server connection";
+            }
+            return result;
         }
 
 
-        protected Void doInBackground(Integer... i)
-        {
-            try
-            {
-                JSONObject jsonResult = new JSONObject(new ParcoAPI().votePark(i[0],i[1]));
-            }
-            catch (Exception e)
-            {
-
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result)
-        {
-
-            vote0Button.setEnabled(true);
-            vote1Button.setEnabled(true);
-            vote2Button.setEnabled(true);
-            vote3Button.setEnabled(true);
-            vote4Button.setEnabled(true);
-            vote5Button.setEnabled(true);
-            vote6Button.setEnabled(true);
-            noVoteButton.setEnabled(true);
+        protected void onPostExecute(String result) {
+            Toast.makeText(ParkDetailActivity.this, result, Toast.LENGTH_SHORT).show();
+            vote0Button   .setEnabled(true);
+            vote1Button   .setEnabled(true);
+            vote2Button   .setEnabled(true);
+            vote3Button   .setEnabled(true);
+            vote4Button   .setEnabled(true);
+            vote5Button   .setEnabled(true);
+            vote6Button   .setEnabled(true);
+            noVoteButton  .setEnabled(true);
             progressdialog.cancel();
         }
     }

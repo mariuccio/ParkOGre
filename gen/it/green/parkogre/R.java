@@ -43,7 +43,7 @@ public final class R {
     public static final class id {
         public static final int AddParkButton=0x7f090012;
         public static final int AddPlace=0x7f09000b;
-        public static final int Indicazions=0x7f09000a;
+        public static final int Indications=0x7f09000a;
         public static final int NearSort=0x7f09000e;
         public static final int NoAddParkButton=0x7f090013;
         public static final int NoVoteButton=0x7f090016;

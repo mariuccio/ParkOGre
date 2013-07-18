@@ -24,7 +24,7 @@
                 android:id="@+id/Vote"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Vota" />
+                android:text="Vote" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -97,10 +97,10 @@
         android:orientation="vertical" >
 
         <Button
-            android:id="@+id/Indicazions"
+            android:id="@+id/Indications"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Indicazioni Stradali" />
+            android:text="Indications" />
     </LinearLayout>
 
 </LinearLayout>

@@ -3,25 +3,13 @@ package it.green.parkogre.rest.resource;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Parco implements Resource {
-    private static String id;
-	private static String numVoti;
-	private static String votoAttuale;
-	private static String city;
-	private static String nomeParco;
-	private static String indirizzoParco;
-	private static String latitude;
-	private static String longitude;
-	private static String coordinate;
-	private static String imageURL;
-	
+//Methods for JSONObject interpretation
+public class Park implements Resource {
 	private JSONObject jsonObject;
 	
-	public Parco(JSONObject jsonObject) {
+	public Park(JSONObject jsonObject) {
 		this.jsonObject = jsonObject;
 	}
-
-
 
     public int getId() {
         int result=0;
@@ -32,7 +20,7 @@ public class Parco implements Resource {
         return result;
     }
 
-	public int getNumVoti() {
+	public int getVoteNum() {
 		int result = 0;
 		try {
 			result = jsonObject.getInt("numVoti");
@@ -41,7 +29,7 @@ public class Parco implements Resource {
 		return result;
 	}
 	
-	public double getvotoAttuale() {
+	public double getCurrentVote() {
 		double result = 0;
 		try {
 			result = jsonObject.getDouble("votoAttuale");

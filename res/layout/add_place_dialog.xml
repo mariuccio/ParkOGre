@@ -20,7 +20,7 @@
             android:id="@+id/NoAddParkButton"
             android:layout_width="118dp"
             android:layout_height="wrap_content"
-            android:text="Don't add this Park"
+            android:text="Don't add the Park"
             android:layout_alignRight="@+id/text" android:layout_alignTop="@+id/text"/>
     <EditText
             android:layout_width="wrap_content"
