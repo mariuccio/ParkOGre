@@ -3,7 +3,6 @@ package it.green.parkogre;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -33,7 +32,7 @@ public class ParksListActivity extends Activity {
     private ArrayAdapter<Park>  adapter     = null;
     private GPS                 gps         = null;
     private ProgressDialog      dialog      = null;
-
+    private boolean             connected   = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         /**********Standard Activity Start*************/
@@ -67,12 +66,13 @@ public class ParksListActivity extends Activity {
                 intent.putExtra("votenum",      park.getVoteNum());
                 intent.putExtra("currentvote",  park.getCurrentVote());
                 intent.putExtra("city",         park.getCity());
-                intent.putExtra("parkname",     park.getNomeParco());
+                intent.putExtra("parkname",     park.getParkName());
                 intent.putExtra("parkaddress",  park.getIndirizzoParco());
                 intent.putExtra("coordinates",  park.getCoordinate());
                 intent.putExtra("imageurl",     park.getImageURL());
                 intent.putExtra("latitude",     park.getLatitude());
                 intent.putExtra("longitude",    park.getLongitude());
+                intent.putExtra("connected",    connected);
                 startActivity(intent);
             }
         });
@@ -99,13 +99,19 @@ public class ParksListActivity extends Activity {
         /*Add park where you are in the server's database*/
         addPlace.setOnClickListener(new OnClickListener() {
             public void onClick(View arg0) {
+
                 gps.getLatitude();
                 gps.getLongitude();
-                final Dialog dialog = new Dialog(context);
-                dialog.setContentView(R.layout.add_place_dialog);
-                dialog.setTitle("Add the Park where you are");
+                final Dialog loginDialog = new Dialog(context);
+                loginDialog.setContentView(R.layout.login_dialog);
+                loginDialog.setTitle("Login");
+                final Dialog addPlaceDialog = new Dialog(context);
+                addPlaceDialog.setContentView(R.layout.add_place_dialog);
+                addPlaceDialog.setTitle("Add the Park where you are");
 
-                final EditText parkNameText = (EditText) dialog.findViewById(R.id.ParkNameText);
+                final EditText parkNameText = (EditText) addPlaceDialog.findViewById(R.id.ParkNameText);
+                final EditText userText = (EditText) loginDialog.findViewById(R.id.UserText);
+                final EditText passwordText = (EditText) loginDialog.findViewById(R.id.PasswordText);
 
                 //Code for empty the editText at touch
                 parkNameText.setOnTouchListener(new View.OnTouchListener() {
@@ -117,7 +123,25 @@ public class ParksListActivity extends Activity {
                     }
                 });
 
-                Button addParkButton = (Button) dialog.findViewById(R.id.AddParkButton);
+                userText.setOnTouchListener(new View.OnTouchListener() {
+                    public boolean onTouch(View view, MotionEvent motionEvent) {
+                        if (userText.getText().toString().equals("User"))
+                            userText.setText("");
+                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                        return false;
+                    }
+                });
+
+                passwordText.setOnTouchListener(new View.OnTouchListener() {
+                    public boolean onTouch(View view, MotionEvent motionEvent) {
+                        if (passwordText.getText().toString().equals("Password"))
+                            passwordText.setText("");
+                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                        return false;
+                    }
+                });
+
+                Button addParkButton = (Button) addPlaceDialog.findViewById(R.id.AddParkButton);
                 addParkButton.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -125,15 +149,39 @@ public class ParksListActivity extends Activity {
                     }
                 });
 
-                Button noAddParkButton = (Button) dialog.findViewById(R.id.NoAddParkButton);
-                noAddParkButton.setOnClickListener(new OnClickListener() {
+                ImageButton loginGoogleImageButton = (ImageButton) loginDialog.findViewById(R.id.loginGoogleImageButton);
+                loginGoogleImageButton.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        dialog.dismiss();
+                        connected = true;
+                        loginDialog.dismiss();
+                        addPlaceDialog.show();
                     }
                 });
 
-                dialog.show();
+                ImageButton loginFacebookImageButton = (ImageButton) loginDialog.findViewById(R.id.loginFacebookImageButton);
+                loginFacebookImageButton.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        connected = true;
+                        loginDialog.dismiss();
+                        addPlaceDialog.show();
+                    }
+                });
+
+                Button noAddParkButton = (Button) addPlaceDialog.findViewById(R.id.NoAddParkButton);
+                noAddParkButton.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        addPlaceDialog.dismiss();
+                    }
+                });
+
+                if(connected)
+                    addPlaceDialog.show();
+                else
+                    loginDialog.show();
+
             }
 
         });
@@ -223,6 +271,8 @@ public class ParksListActivity extends Activity {
                 for (int i = 0; i < jsonResult.length(); i++) {
                     parks.add(new Park(jsonResult.getJSONObject(i)));
                 }
+
+
             } catch (Exception e) {
                 parks = null;
             }
@@ -272,6 +322,7 @@ public class ParksListActivity extends Activity {
                 for (int i = 0; i < jsonResult.length(); i++) {
                     parks.add(new Park(jsonResult.getJSONObject(i)));
                 }
+
             } catch (Exception e) {
             }
             return parks;
@@ -336,7 +387,6 @@ public class ParksListActivity extends Activity {
                     adapter.add(park);
                 }
             }
-
             super.onPostExecute(parks);
         }
     }

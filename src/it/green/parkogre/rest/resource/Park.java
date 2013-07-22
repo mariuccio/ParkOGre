@@ -48,11 +48,11 @@ public class Park implements Resource {
 	}
 	@Override
 	public String toString() {
-		String present = this.getNomeParco() + ", " + this.getCity();
+		String present = this.getParkName() + ", " + this.getCity();
 		return present;
 	}
 	
-	public String getNomeParco() {
+	public String getParkName() {
 		String result = null;
 		try {
 			result = jsonObject.getString("nomeParco");

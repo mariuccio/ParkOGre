@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" >
+
+
+
+    <EditText
+            android:layout_width="239dp"
+            android:layout_height="wrap_content"
+            android:text="User"
+            android:id="@+id/UserText"
+            android:layout_above="@+id/text"
+            android:layout_alignParentRight="true" android:layout_alignParentLeft="true"/>
+
+    <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="47dp"
+            android:text="Password"
+            android:id="@+id/PasswordText"
+            android:layout_alignLeft="@+id/UserText" android:layout_below="@+id/UserText"
+            android:layout_alignRight="@+id/UserText"/>
+
+    <ImageButton
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:id="@+id/loginGoogleImageButton"
+            android:src="@drawable/logingoogle"
+            android:layout_alignLeft="@+id/UserText" android:layout_below="@+id/PasswordText"/>
+
+    <ImageButton
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:id="@+id/loginFacebookImageButton"
+            android:src="@drawable/loginfacebook"
+            android:layout_alignRight="@+id/UserText" android:layout_below="@+id/PasswordText"/>
+
+</RelativeLayout>

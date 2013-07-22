@@ -6,12 +6,16 @@ import android.app.Dialog;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.widget.*;
 import it.green.parkogre.rest.ParkAPI;
 import org.json.JSONObject;
@@ -34,7 +38,7 @@ public class ParkDetailActivity extends Activity {
     private int             id              = 0   ;
     private ProgressDialog  progressdialog  = null;
     /*Vote popup*/
-    private Dialog          dialog          = null;
+    private Dialog voteDialog = null;
     private Button          vote0Button     = null;
     private Button          vote1Button     = null;
     private Button          vote2Button     = null;
@@ -43,6 +47,7 @@ public class ParkDetailActivity extends Activity {
     private Button          vote5Button     = null;
     private Button          vote6Button     = null;
     private Button          noVoteButton    = null;
+    boolean                 connected             ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +76,7 @@ public class ParkDetailActivity extends Activity {
         textCity        .setText("City: "        + getIntent().getStringExtra("city"       ));
         textAddress     .setText("Address: "     + getIntent().getStringExtra("parkaddress"));
         textCoordinates .setText("Coordinates: " + getIntent().getStringExtra("coordinates"));
+        connected       = getIntent().getBooleanExtra("connected", false);
 
         /****It writes number of votes using voteNum int variable****/
         textVoteNum.setText("Votes' Number: " + Integer.toString(voteNum));
@@ -221,25 +227,31 @@ public class ParkDetailActivity extends Activity {
         toVote.setOnClickListener(new OnClickListener() {
             public void onClick(View arg0) {
                 /*vote dialog's initialization*/
-                dialog = new Dialog(ParkDetailActivity.this);
-                dialog.setContentView(R.layout.vote_dialog);
-                dialog.setTitle("Vote this Park, from 0 to 6");
+                voteDialog = new Dialog(ParkDetailActivity.this);
+                voteDialog.setContentView(R.layout.vote_dialog);
+                voteDialog.setTitle("Vote this Park, from 0 to 6");
+                final Dialog loginDialog = new Dialog(context);
+                loginDialog.setContentView(R.layout.login_dialog);
+                loginDialog.setTitle("Login");
+
+                final EditText userText = (EditText) loginDialog.findViewById(R.id.UserText);
+                final EditText passwordText = (EditText) loginDialog.findViewById(R.id.PasswordText);
 
                 /*vote dialog's buttons' initialization*/
-                vote0Button     = (Button) dialog.findViewById(R.id.Vote0Button );
-                vote1Button     = (Button) dialog.findViewById(R.id.Vote1Button );
-                vote2Button     = (Button) dialog.findViewById(R.id.Vote2Button );
-                vote3Button     = (Button) dialog.findViewById(R.id.Vote3Button );
-                vote4Button     = (Button) dialog.findViewById(R.id.Vote4Button );
-                vote5Button     = (Button) dialog.findViewById(R.id.Vote5Button );
-                vote6Button     = (Button) dialog.findViewById(R.id.Vote6Button );
-                noVoteButton    = (Button) dialog.findViewById(R.id.NoVoteButton);
+                vote0Button     = (Button) voteDialog.findViewById(R.id.Vote0Button );
+                vote1Button     = (Button) voteDialog.findViewById(R.id.Vote1Button );
+                vote2Button     = (Button) voteDialog.findViewById(R.id.Vote2Button );
+                vote3Button     = (Button) voteDialog.findViewById(R.id.Vote3Button );
+                vote4Button     = (Button) voteDialog.findViewById(R.id.Vote4Button );
+                vote5Button     = (Button) voteDialog.findViewById(R.id.Vote5Button );
+                vote6Button     = (Button) voteDialog.findViewById(R.id.Vote6Button );
+                noVoteButton    = (Button) voteDialog.findViewById(R.id.NoVoteButton);
 
                 vote0Button.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         votePark(id, 0);
-                        dialog.dismiss();
+                        voteDialog.dismiss();
                     }
                 });
 
@@ -247,7 +259,7 @@ public class ParkDetailActivity extends Activity {
                     @Override
                     public void onClick(View v) {
                         votePark(id, 1);
-                        dialog.dismiss();
+                        voteDialog.dismiss();
                     }
                 });
 
@@ -255,7 +267,7 @@ public class ParkDetailActivity extends Activity {
                     @Override
                     public void onClick(View v) {
                         votePark(id, 2);
-                        dialog.dismiss();
+                        voteDialog.dismiss();
                     }
                 });
 
@@ -263,7 +275,7 @@ public class ParkDetailActivity extends Activity {
                     @Override
                     public void onClick(View v) {
                         votePark(id, 3);
-                        dialog.dismiss();
+                        voteDialog.dismiss();
                     }
                 });
 
@@ -271,7 +283,7 @@ public class ParkDetailActivity extends Activity {
                     @Override
                     public void onClick(View v) {
                         votePark(id, 4);
-                        dialog.dismiss();
+                        voteDialog.dismiss();
                     }
                 });
 
@@ -279,7 +291,7 @@ public class ParkDetailActivity extends Activity {
                     @Override
                     public void onClick(View v) {
                         votePark(id, 5);
-                        dialog.dismiss();
+                        voteDialog.dismiss();
                     }
                 });
 
@@ -287,18 +299,59 @@ public class ParkDetailActivity extends Activity {
                     @Override
                     public void onClick(View v) {
                         votePark(id, 6);
-                        dialog.dismiss();
+                        voteDialog.dismiss();
                     }
                 });
 
                 noVoteButton.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        dialog.dismiss();
+                        voteDialog.dismiss();
                     }
                 });
 
-                dialog.show();
+                userText.setOnTouchListener(new View.OnTouchListener() {
+                    public boolean onTouch(View view, MotionEvent motionEvent) {
+                        if (userText.getText().toString().equals("User"))
+                            userText.setText("");
+                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                        return false;
+                    }
+                });
+
+                passwordText.setOnTouchListener(new View.OnTouchListener() {
+                    public boolean onTouch(View view, MotionEvent motionEvent) {
+                        if (passwordText.getText().toString().equals("Password"))
+                            passwordText.setText("");
+                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                        return false;
+                    }
+                });
+
+                ImageButton loginGoogleImageButton = (ImageButton) loginDialog.findViewById(R.id.loginGoogleImageButton);
+                loginGoogleImageButton.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        connected = true;
+                        loginDialog.dismiss();
+                        voteDialog.show();
+                    }
+                });
+
+                ImageButton loginFacebookImageButton = (ImageButton) loginDialog.findViewById(R.id.loginFacebookImageButton);
+                loginFacebookImageButton.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        connected = true;
+                        loginDialog.dismiss();
+                        voteDialog.show();
+                    }
+                });
+
+                if(connected)
+                    voteDialog.show();
+                else
+                    loginDialog.show();
             }
         });
 
@@ -306,13 +359,18 @@ public class ParkDetailActivity extends Activity {
         indications.setOnClickListener(new OnClickListener() {
             public void onClick(View arg0) {
                 Toast.makeText(ParkDetailActivity.this, "Work In Progress!", Toast.LENGTH_SHORT).show();
+                /**********GPS Initialization*******/
+                gps = new GPS(ParkDetailActivity.this);
+                if (!gps.canGetLocation())
+                    gps.showSettingsAlert();
+                Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                        Uri.parse("http://maps.google.com/maps?saddr="+gps.getLatitude()+","+gps.getLongitude()+"&daddr="+getIntent().getStringExtra("coordinates")));
+                startActivity(intent);
             }
         });
     }
 
-    /**
-     * Function that takes photo from the url and puts it in the imageview
-     */
+    /*Function that takes photo from the url and puts it in the imageview*/
     public void addPhoto(String url) throws IOException {
         URL newurl = new URL(url);
         Bitmap mIcon_val = BitmapFactory.decodeStream(newurl.openConnection().getInputStream());
