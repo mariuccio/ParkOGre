@@ -56,7 +56,10 @@
                 android:id="@+id/textVoteNum"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="0.36" />
+                android:layout_weight="0.36"
+                android:textStyle="bold"
+                android:textSize="15dp"
+                android:textColor="#000000"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -69,26 +72,38 @@
         <TextView
             android:id="@+id/textName"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.08" />
+            android:layout_height="33dp"
+            android:layout_weight="0.08"
+            android:textStyle="bold"
+            android:textSize="15dp"
+            android:textColor="#000000"/>
 
         <TextView
             android:id="@+id/textAddress"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.17" />
+            android:layout_height="27dp"
+            android:layout_weight="0.17"
+            android:textStyle="bold"
+            android:textSize="15dp"
+            android:textColor="#000000"/>
 
         <TextView
             android:id="@+id/textCity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.28" />
+            android:layout_weight="0.28"
+            android:textStyle="bold"
+            android:textSize="15dp"
+            android:textColor="#000000"/>
 
         <TextView
             android:id="@+id/textCoordinates"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.17" />
+            android:layout_weight="0.17"
+            android:textStyle="bold"
+            android:textSize="15dp"
+            android:textColor="#000000"/>
     </LinearLayout>
 
     <LinearLayout

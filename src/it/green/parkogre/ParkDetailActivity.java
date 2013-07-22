@@ -358,11 +358,11 @@ public class ParkDetailActivity extends Activity {
         /***On click it shows an activity where the user can see google maps indications from his location to the park***/
         indications.setOnClickListener(new OnClickListener() {
             public void onClick(View arg0) {
-                Toast.makeText(ParkDetailActivity.this, "Work In Progress!", Toast.LENGTH_SHORT).show();
                 /**********GPS Initialization*******/
                 gps = new GPS(ParkDetailActivity.this);
                 if (!gps.canGetLocation())
                     gps.showSettingsAlert();
+
                 Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
                         Uri.parse("http://maps.google.com/maps?saddr="+gps.getLatitude()+","+gps.getLongitude()+"&daddr="+getIntent().getStringExtra("coordinates")));
                 startActivity(intent);
@@ -401,8 +401,9 @@ public class ParkDetailActivity extends Activity {
 
         protected String doInBackground(Integer... i) {
             String result;
+            JSONObject jsonResult;
             try {
-                JSONObject jsonResult = new JSONObject(new ParkAPI().votePark(i[0], i[1]));
+                jsonResult = new JSONObject(new ParkAPI().votePark(i[0], i[1]));
                 if(jsonResult.getBoolean("ok"))
                     result = "Good vote";
                 else

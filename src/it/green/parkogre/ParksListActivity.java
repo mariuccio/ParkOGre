@@ -1,5 +1,6 @@
 package it.green.parkogre;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -11,6 +12,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,17 +24,18 @@ import it.green.parkogre.rest.ParkAPI;
 import it.green.parkogre.rest.resource.Park;
 
 public class ParksListActivity extends Activity {
-    private EditText            searchText  = null;
-    private ImageButton         addPlace    = null;
-    private ImageButton         searchPlace = null;
-    private ImageButton         nearSort    = null;
-    private ImageButton         voteSort    = null;
-    private ListView            resultList  = null;
-    private ArrayList<Park>     parks       = null;
-    private ArrayAdapter<Park>  adapter     = null;
-    private GPS                 gps         = null;
-    private ProgressDialog      dialog      = null;
-    private boolean             connected   = false;
+    private EditText            searchText      = null;
+    private ImageButton         addPlace        = null;
+    private ImageButton         searchPlace     = null;
+    private ImageButton         nearSort        = null;
+    private ImageButton         voteSort        = null;
+    private ListView            resultList      = null;
+    private ArrayList<Park>     parks           = null;
+    private ParkAdapter         adapter         = null;
+    private GPS                 gps             = null;
+    public  ProgressDialog      progressDialog  = null;
+    private Dialog              addPlaceDialog  = null;
+    private boolean             connected       = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         /**********Standard Activity Start*************/
@@ -53,7 +56,7 @@ public class ParksListActivity extends Activity {
         resultList  = (ListView)    findViewById(R.id.parksListView );
 
         /**********Adapter for the listview and ParkDetailActivity intent*******/
-        adapter = new ArrayAdapter<Park>(getApplicationContext(), R.layout.listview_layout, new ArrayList<Park>());
+        adapter = new ParkAdapter(this, R.layout.listview_item_row, new ArrayList<Park>());
         resultList.setAdapter(adapter);
         resultList.setCacheColorHint(Color.TRANSPARENT);
         resultList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -89,25 +92,76 @@ public class ParksListActivity extends Activity {
                         Math.sin(dLng / 2) * Math.sin(dLng / 2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         double dist = earthRadius * c;
-
         int meterConversion = 1609;
-
         return dist * meterConversion;
+    }
+
+    /*AsyncTask for add-park's server-client connection*/
+    public void addPark(String nome, String lat, String lon) {
+        new AddParkTask().execute(nome, lat, lon);
+    }
+
+    private class AddParkTask extends AsyncTask<String, Void, String> {
+        protected void onPreExecute() {
+            progressDialog = new ProgressDialog(ParksListActivity.this);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setIndeterminateDrawable(getResources().getDrawable(R.anim.anim_progress_bar));
+            progressDialog.setMessage("Caricamento...");
+            progressDialog.show();
+            addPlace.setEnabled(false);
+            searchPlace.setEnabled(false);
+            nearSort.setEnabled(false);
+            voteSort.setEnabled(false);
+        }
+
+        protected String doInBackground(String... i) {
+
+            String result;
+
+            try {
+                result = new ParkAPI().addPark(i[0], Double.parseDouble(i[1]), Double.parseDouble(i[2]), ParksListActivity.this);
+                if(result=="ok")
+                    result = "park added";
+                else
+                    result = "Something went wrong";
+            } catch (NumberFormatException e) {
+                // TODO Auto-generated catch block
+                result = "Something went wrong with server connection";
+                Log.e("asd", e.getMessage());
+                e.printStackTrace();
+            } catch (UnsupportedEncodingException e) {
+                // TODO Auto-generated catch block
+                result = "Something went wrong with server connection";
+                Log.e("asd", e.getMessage());
+                e.printStackTrace();
+            }
+            return result;
+        }
+
+
+        protected void onPostExecute(String result) {
+            Toast.makeText(ParksListActivity.this, result, Toast.LENGTH_SHORT).show();
+            addPlace.setEnabled(true);
+            searchPlace.setEnabled(true);
+            nearSort.setEnabled(true);
+            voteSort.setEnabled(true);
+            progressDialog.dismiss();
+            addPlaceDialog.dismiss();
+        }
     }
 
     public void addListenerOnButtons(final Context context) {
         /*Add park where you are in the server's database*/
         addPlace.setOnClickListener(new OnClickListener() {
             public void onClick(View arg0) {
-
-                gps.getLatitude();
-                gps.getLongitude();
+                final double lat=gps.getLatitude();
+                final double lon=gps.getLongitude();
+                addPlaceDialog = new Dialog(context);
+                addPlaceDialog.setContentView(R.layout.add_place_dialog);
+                addPlaceDialog.setTitle("Add the Park where you are");
                 final Dialog loginDialog = new Dialog(context);
                 loginDialog.setContentView(R.layout.login_dialog);
                 loginDialog.setTitle("Login");
-                final Dialog addPlaceDialog = new Dialog(context);
-                addPlaceDialog.setContentView(R.layout.add_place_dialog);
-                addPlaceDialog.setTitle("Add the Park where you are");
 
                 final EditText parkNameText = (EditText) addPlaceDialog.findViewById(R.id.ParkNameText);
                 final EditText userText = (EditText) loginDialog.findViewById(R.id.UserText);
@@ -141,14 +195,6 @@ public class ParksListActivity extends Activity {
                     }
                 });
 
-                Button addParkButton = (Button) addPlaceDialog.findViewById(R.id.AddParkButton);
-                addParkButton.setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //TODO aggiungo il parco vedendo il nome in parkNameText e passo al server lat long e nome
-                    }
-                });
-
                 ImageButton loginGoogleImageButton = (ImageButton) loginDialog.findViewById(R.id.loginGoogleImageButton);
                 loginGoogleImageButton.setOnClickListener(new OnClickListener() {
                     @Override
@@ -166,6 +212,17 @@ public class ParksListActivity extends Activity {
                         connected = true;
                         loginDialog.dismiss();
                         addPlaceDialog.show();
+                    }
+                });
+
+                Button addParkButton = (Button) addPlaceDialog.findViewById(R.id.AddParkButton);
+                addParkButton.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String slat=""+lat;
+                        String slon=""+lon;
+                        //TODO aggiungo il parco vedendo il nome in parkNameText e passo al server lat long e nome
+                        addPark(parkNameText.getText().toString(), slat, slon);
                     }
                 });
 
@@ -250,11 +307,11 @@ public class ParksListActivity extends Activity {
     private class FetchParksTask extends AsyncTask<Void, Void, ArrayList<Park>> {
         @Override
         protected void onPreExecute() {
-            dialog = new ProgressDialog(ParksListActivity.this);
-            dialog.setIndeterminate(true);
-            dialog.setIndeterminateDrawable(getResources().getDrawable(R.anim.anim_progress_bar));
-            dialog.setMessage("Caricamento...");
-            dialog.show();
+            progressDialog = new ProgressDialog(ParksListActivity.this);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setIndeterminateDrawable(getResources().getDrawable(R.anim.anim_progress_bar));
+            progressDialog.setMessage("Caricamento...");
+            progressDialog.show();
             searchPlace.setEnabled(false);
             addPlace.setEnabled(false);
             nearSort.setEnabled(false);
@@ -286,7 +343,7 @@ public class ParksListActivity extends Activity {
             addPlace.setEnabled(true);
             nearSort.setEnabled(true);
             voteSort.setEnabled(true);
-            dialog.cancel();
+            progressDialog.cancel();
             adapter.clear();
             if (parks != null) {
                 for (Park park : parks) {
@@ -294,7 +351,6 @@ public class ParksListActivity extends Activity {
                 }
 
             }
-
             super.onPostExecute(parks);
         }
     }
@@ -302,11 +358,11 @@ public class ParksListActivity extends Activity {
     private class FetchParksSearchTask extends AsyncTask<Void, Void, ArrayList<Park>> {
         @Override
         protected void onPreExecute() {
-            dialog = new ProgressDialog(ParksListActivity.this);
-            dialog.setIndeterminate(true);
-            dialog.setIndeterminateDrawable(getResources().getDrawable(R.anim.anim_progress_bar));
-            dialog.setMessage("Caricamento...");
-            dialog.show();
+            progressDialog = new ProgressDialog(ParksListActivity.this);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setIndeterminateDrawable(getResources().getDrawable(R.anim.anim_progress_bar));
+            progressDialog.setMessage("Caricamento...");
+            progressDialog.show();
             searchPlace.setEnabled(false);
             addPlace.setEnabled(false);
             nearSort.setEnabled(false);
@@ -334,7 +390,7 @@ public class ParksListActivity extends Activity {
             addPlace.setEnabled(true);
             nearSort.setEnabled(true);
             voteSort.setEnabled(true);
-            dialog.cancel();
+            progressDialog.cancel();
             adapter.clear();
 
             if (parks != null) {
@@ -356,11 +412,11 @@ public class ParksListActivity extends Activity {
     private class FetchParksOrderTask extends AsyncTask<Void, Void, ArrayList<Park>> {
         @Override
         protected void onPreExecute() {
-            dialog = new ProgressDialog(ParksListActivity.this);
-            dialog.setIndeterminate(true);
-            dialog.setIndeterminateDrawable(getResources().getDrawable(R.anim.anim_progress_bar));
-            dialog.setMessage("Caricamento...");
-            dialog.show();
+            progressDialog = new ProgressDialog(ParksListActivity.this);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setIndeterminateDrawable(getResources().getDrawable(R.anim.anim_progress_bar));
+            progressDialog.setMessage("Caricamento...");
+            progressDialog.show();
             searchPlace.setEnabled(false);
             addPlace.setEnabled(false);
             nearSort.setEnabled(false);
@@ -379,7 +435,7 @@ public class ParksListActivity extends Activity {
             addPlace.setEnabled(true);
             nearSort.setEnabled(true);
             voteSort.setEnabled(true);
-            dialog.cancel();
+            progressDialog.cancel();
             adapter.clear();
 
             if (parks != null) {
